@@ -5,31 +5,19 @@ import { useRouter } from "expo-router";
 
 const LoadingScreen = () => {
   const router = useRouter();
+
   useEffect(() => {
     const timer = setTimeout(() => {
       router.push("/screens/LoginScreen");
-    }, 1000);
+    }, 2000);
 
     return () => clearTimeout(timer);
   }, []);
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Loading...</Text>
+    <View className="flex-1 items-center justify-center">
+      <Text className="text-red-600 text-5xl">Loading...</Text>
       <Logo imageSize={100} fontSize={40} />
     </View>
   );
 };
-
-const styles = {
-  container: {
-    flex: 1,
-    justifyContent: "center", // vertical align center
-    alignItems: "center", // vertical align center
-  },
-  text: {
-    fontSize: 24,
-    marginBottom: 16,
-  },
-};
-
 export default LoadingScreen;

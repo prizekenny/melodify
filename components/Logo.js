@@ -1,6 +1,6 @@
 import { View, Text, Image } from "react-native";
 import React from "react";
-import { APP_NAME } from "../app/config/constants";
+import { APP_NAME } from "../config/constants";
 import { useFonts } from "expo-font";
 
 const Logo = ({
@@ -29,20 +29,20 @@ const Logo = ({
       >
         <Image
           source={require("../assets/icon.png")}
-          style={{
-            width: imageSize * 1.5,
-            height: imageSize,
-            resizeMode: "cover",
-          }}
+          // style={{
+          //   width: imageSize * 1.5,
+          //   height: imageSize,
+          //   resizeMode: "cover",
+          // }}
         />
       </View>
       <Text
-        style={{
-          fontFamily: "FredokaOne",
-          fontSize: fontSize,
-          color: color,
-          marginLeft: spacing,
-        }}
+      // style={{
+      //   fontFamily: "FredokaOne",
+      //   fontSize: fontSize,
+      //   color: color,
+      //   marginLeft: spacing,
+      // }}
       >
         {APP_NAME}
       </Text>

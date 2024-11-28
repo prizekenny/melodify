@@ -1,32 +1,14 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, Button } from "react-native";
 import LoadingScreen from "./screens/LoadingScreen";
+import { NativeWindStyleSheet } from "nativewind";
+import Constants from "expo-constants";
 
 export default function Page() {
+  // Without this line, only one tag in className will be output
+  NativeWindStyleSheet.setOutput({ default: "native" });
   return (
-    <View style={styles.container}>
+    <View className="flex-1">
       <LoadingScreen />
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    padding: 24,
-  },
-  main: {
-    flex: 1,
-    justifyContent: "center",
-    maxWidth: 960,
-    marginHorizontal: "auto",
-  },
-  title: {
-    fontSize: 64,
-    fontWeight: "bold",
-  },
-  subtitle: {
-    fontSize: 36,
-    color: "#38434D",
-  },
-});
