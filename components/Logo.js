@@ -29,20 +29,20 @@ const Logo = ({
       >
         <Image
           source={require("../assets/icon.png")}
-          // style={{
-          //   width: imageSize * 1.5,
-          //   height: imageSize,
-          //   resizeMode: "cover",
-          // }}
+          style={{
+            width: imageSize * 1.5,
+            height: imageSize,
+            resizeMode: "cover",
+          }}
         />
       </View>
       <Text
-      // style={{
-      //   fontFamily: "FredokaOne",
-      //   fontSize: fontSize,
-      //   color: color,
-      //   marginLeft: spacing,
-      // }}
+        style={{
+          fontFamily: "FredokaOne",
+          fontSize: fontSize,
+          color: color,
+          marginLeft: spacing,
+        }}
       >
         {APP_NAME}
       </Text>

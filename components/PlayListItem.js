@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
 const PlayListItem = ({
+  id,
   songName,
   artistName,
   duration,
@@ -30,7 +31,11 @@ const PlayListItem = ({
       {/* Song time and fav button */}
       <View className="flex-row items-center">
         <Text className="text-sm text-gray-600 mr-3">{duration}</Text>
-        <TouchableOpacity onPress={onToggleFavorite}>
+        <TouchableOpacity
+          onPress={() => {
+            onToggleFavorite(id);
+          }}
+        >
           <Ionicons
             name={isFavorite ? "heart" : "heart-outline"}
             size={20}
