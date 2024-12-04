@@ -65,14 +65,22 @@ const SearchScreen = () => {
 
       {/* Categories Section */}
       <View style={styles.categorySection}>
-        <FlatList
-          data={filteredCategories}
-          keyExtractor={(item) => item.id}
-          renderItem={renderCategoryItem}
-          numColumns={2}
-          contentContainerStyle={styles.categoriesContainer}
-          columnWrapperStyle={styles.row}
-        />
+        {filteredCategories.length > 0 ? (
+          <FlatList
+            data={filteredCategories}
+            keyExtractor={(item) => item.id}
+            renderItem={renderCategoryItem}
+            numColumns={2}
+            contentContainerStyle={styles.categoriesContainer}
+            columnWrapperStyle={styles.row}
+          />
+        ) : (
+          <View style={styles.noResultsContainer}>
+            <Text style={styles.noResultsText}>
+              Sorry, there is no relevant result...
+            </Text>
+          </View>
+        )}
       </View>
     </View>
   );
@@ -107,7 +115,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#333",
     backgroundColor: "transparent",
-    outlineColor: "transparent", // Prevents the black outline on focus
+    outlineColor: "transparent", 
   },
   cancelButton: {
     marginLeft: 10,
@@ -151,6 +159,16 @@ const styles = StyleSheet.create({
     color: "#333",
     textAlign: "center",
     padding: 10,
+  },
+  noResultsContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 20,
+  },
+  noResultsText: {
+    fontSize: 18,
+    color: "#888",
   },
 });
 
