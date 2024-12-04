@@ -217,7 +217,7 @@ const MainScreen = () => {
   };
 
   return (
-    <View className="flex-1 flex-col p-10">
+    <View className="flex-1 flex-col px-5 pt-8">
       {/* Header */}
       <View className="items-center">
         <Logo imageSize={80} fontSize={30} />
@@ -234,7 +234,7 @@ const MainScreen = () => {
       </View>
 
       {/* News */}
-      <View className="flex-col mb-5">
+      <View className="flex-col mb-5 h-60">
         <Text className="text-textPrimary mb-2 text-2xl">News</Text>
         <ScrollView
           horizontal={true}
@@ -245,9 +245,8 @@ const MainScreen = () => {
         >
           {musics.map((music, index) => (
             /* must use View to wrap PlaylistItem, otherwise the parent gap does not work */
-            <View>
+            <View key={index}>
               <MusicCard
-                key={index}
                 imgURL={music.image}
                 songName={music.name}
                 artistName={music.artist}
@@ -258,7 +257,7 @@ const MainScreen = () => {
       </View>
 
       {/* Playlist */}
-      <View className="flex-1 flex-col">
+      <View className="flex-col">
         <Text className="text-textPrimary mb-2 text-2xl">Playlist</Text>
         <ScrollView
           showsVerticalScrollIndicator={true}
@@ -268,9 +267,8 @@ const MainScreen = () => {
         >
           {playlist.map((item, index) => (
             /* must use View to wrap PlaylistItem, otherwise the parent gap does not work */
-            <View>
+            <View key={item.id}>
               <PlaylistItem
-                key={item.id}
                 id={item.id}
                 songName={item.name}
                 artistName={item.artist}

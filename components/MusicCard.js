@@ -3,9 +3,9 @@ import React from "react";
 
 const MusicCard = ({ imgURL, songName, artistName, onPlay }) => {
   return (
-    <View className="flex-column bg-slate-300 rounded-lg">
+    <View className="flex-1 w-36 flex-column rounded-lg">
       {/* Image and play button */}
-      <View className="relative w-48 h-48">
+      <View className="w-36 h-36">
         <Image
           source={{ uri: imgURL || "https://via.placeholder.com/150" }}
           className="w-full h-full rounded-3xl"
@@ -22,14 +22,19 @@ const MusicCard = ({ imgURL, songName, artistName, onPlay }) => {
       </View>
 
       {/* Song information */}
-      <View className="flex-1 ml-4 mt-1">
+      <View className="mt-1">
         <Text
-          className="text-base font-bold text-textPrimary"
-          numberOfLines={1}
+          className="text-base font-bold text-gray-900"
+          numberOfLines={1} // Limit to single line
+          ellipsizeMode="tail" // Display as ... when exceeding
         >
           {songName}
         </Text>
-        <Text className="text-sm text-textSecondary" numberOfLines={1}>
+        <Text
+          className="text-sm text-gray-600"
+          numberOfLines={1} // Limit to single line
+          ellipsizeMode="tail" // Display as ... when exceeding
+        >
           {artistName}
         </Text>
       </View>

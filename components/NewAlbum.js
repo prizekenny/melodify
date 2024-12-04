@@ -3,7 +3,7 @@ import { View, Text, Image } from "react-native";
 
 const NewAlbum = ({ albumName, artistName, artistPhoto }) => {
   return (
-    <View className="flex-row items-center bg-primary rounded-3xl shadow-md p-4">
+    <View className="flex-row items-center bg-primary rounded-3xl shadow-md p-2">
       {/* Album information on left part */}
       <View className="flex-1 gap-2">
         <Text className="text-xs text-white">New Album</Text>
@@ -16,7 +16,7 @@ const NewAlbum = ({ albumName, artistName, artistPhoto }) => {
       </View>
 
       {/* Artist photo on the right part */}
-      <View className="relative w-60 h-40 pl-10">
+      <View className="relative w-48 h-28 pl-5">
         <Image
           source={{ uri: artistPhoto || "https://via.placeholder.com/40" }}
           className="w-full h-full rounded-3xl"
