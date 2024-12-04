@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import NewAlbum from "../../components/NewAlbum";
 import MusicCard from "../../components/MusicCard";
 import Logo from "../../components/Logo";
-import PlaylistItem from "../../components/PlaylistItem";
+import PlaylistItem from "../../components/PlayListItem";
 
 const MainScreen = () => {
   const album = {
