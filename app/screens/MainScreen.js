@@ -225,7 +225,7 @@ const MainScreen = () => {
 
       {/* New Album */}
       <View className="flex-col mb-5">
-        <Text className="text-black mb-5 text-2xl">New Album</Text>
+        {/* <Text className="text-black mb-5 text-2xl">New Album</Text> */}
         <NewAlbum
           albumName={album.name}
           artistName={album.artist}
@@ -235,19 +235,17 @@ const MainScreen = () => {
 
       {/* News */}
       <View className="flex-col mb-5">
-        <Text className="text-black mb-5 text-2xl">News</Text>
+        <Text className="text-textPrimary mb-2 text-2xl">News</Text>
         <ScrollView
           horizontal={true}
           showsHorizontalScrollIndicator={true}
           keyboardShouldPersistTaps="handled"
           nestedScrollEnabled={true}
-          className="gap-1"
+          className="gap-2"
         >
           {musics.map((music, index) => (
-            <View
-              key={index}
-              className={index === musics.length - 1 ? "" : "mr-2"}
-            >
+            /* must use View to wrap PlaylistItem, otherwise the parent gap does not work */
+            <View>
               <MusicCard
                 key={index}
                 imgURL={music.image}
@@ -261,18 +259,16 @@ const MainScreen = () => {
 
       {/* Playlist */}
       <View className="flex-1 flex-col">
-        <Text className="text-black mb-5 text-2xl">Playlist</Text>
+        <Text className="text-textPrimary mb-2 text-2xl">Playlist</Text>
         <ScrollView
           showsVerticalScrollIndicator={true}
           keyboardShouldPersistTaps="handled"
           nestedScrollEnabled={true}
-          className="gap-1"
+          className="gap-2"
         >
           {playlist.map((item, index) => (
-            <View
-              key={index}
-              className={index === musics.length - 1 ? "" : "mr-0"}
-            >
+            /* must use View to wrap PlaylistItem, otherwise the parent gap does not work */
+            <View>
               <PlaylistItem
                 key={item.id}
                 id={item.id}

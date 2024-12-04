@@ -6,7 +6,7 @@ import { useFonts } from "expo-font";
 const Logo = ({
   imageSize = 50,
   fontSize = 24,
-  color = "#FF914D",
+  color = "text-primary",
   spacing = 2,
 }) => {
   const [fontsLoaded] = useFonts({
@@ -16,11 +16,12 @@ const Logo = ({
   if (!fontsLoaded) {
     return <Text>"FredokaOne font loads failed!</Text>;
   }
+
   return (
-    <View style={{ flexDirection: "row", alignItems: "center" }}>
+    <View className="flex-row items-center">
       <View
         style={{
-          width: imageSize - 20, // 调整容器宽度以去除空白
+          width: imageSize - 20,
           height: imageSize,
           overflow: "hidden",
           justifyContent: "center",
@@ -37,11 +38,10 @@ const Logo = ({
         />
       </View>
       <Text
+        className={`${color} ml-${spacing}`}
         style={{
           fontFamily: "FredokaOne",
           fontSize: fontSize,
-          color: color,
-          marginLeft: spacing,
         }}
       >
         {APP_NAME}
