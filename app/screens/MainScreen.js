@@ -217,7 +217,7 @@ const MainScreen = () => {
   };
 
   return (
-    <View className="flex-1 flex-col px-5 pt-8">
+    <View className="bg-background flex-1 flex-col px-5 pt-8">
       {/* Header */}
       <View className="items-center">
         <Logo imageSize={80} fontSize={30} />
@@ -257,7 +257,7 @@ const MainScreen = () => {
       </View>
 
       {/* Playlist */}
-      <View className="flex-col">
+      <View className="flex-1 flex-col pb-2">
         <Text className="text-textPrimary mb-2 text-2xl">Playlist</Text>
         <ScrollView
           showsVerticalScrollIndicator={true}

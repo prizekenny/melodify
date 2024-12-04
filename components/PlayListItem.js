@@ -12,7 +12,7 @@ const PlaylistItem = ({
   onToggleFavorite,
 }) => {
   return (
-    <View className="flex-row items-center justify-between bg-white rounded-lg p-3 shadow-md">
+    <View className="flex-row items-center justify-between bg-background mr-2 rounded-lg p-1 shadow-md">
       {/* Play button */}
       <TouchableOpacity onPress={onPlay} className="p-2">
         <Ionicons name="play" size={24} color="#4CAF50" />
