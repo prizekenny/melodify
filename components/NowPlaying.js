@@ -15,7 +15,7 @@ const NowPlaying = () => {
     playPreviousTrack,
     setCurrentTime,
   } = useTracks();
-  const router = useRouter(); // 初始化 router
+  const router = useRouter(); 
 
   if (!playingTrack) return null;
 
@@ -25,7 +25,7 @@ const NowPlaying = () => {
       <View className="flex-row items-center px-2 pt-2">
         {/* Clickable Album Cover */}
         <TouchableOpacity
-          onPress={() => router.push("/music")} // 跳转到 MusicScreen
+          onPress={() => router.push("/music")}
           style={{ marginRight: 8 }}
         >
           <Image

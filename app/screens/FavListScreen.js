@@ -4,11 +4,14 @@ import { Ionicons } from "@expo/vector-icons";
 import PlaylistItem from "../../components/PlayListItem";
 import { useRouter } from "expo-router";
 import { getTracks } from "../api/music";
+import { useTracks } from "../context/TrackProvider";
+import NowPlaying from "../../components/NowPlaying";
 
 const FavListScreen = () => {
   const [tracks, setTracks] = useState([]);
   const [isRandom, setIsRandom] = useState(false);
   const router = useRouter();
+  const { setPlayingTrack, updateTrack } = useTracks();
 
   // Fetch favorite tracks
   useEffect(() => {
@@ -25,59 +28,40 @@ const FavListScreen = () => {
     fetchFavoriteTracks();
   }, []);
 
-  // Create playlist handlers
-  const handlePlay = (trackId) => {
-    // Find the index of the current track
-    const currentIndex = tracks.findIndex(track => track.id === trackId);
-    if (currentIndex === -1) return;
-
-    // If random play is enabled, shuffle the playlist
-    if (isRandom) {
-      const shuffledTracks = [...tracks].sort(() => Math.random() - 0.5);
-      // TODO: Implement play logic
-      console.log("Playing shuffled tracks starting from:", shuffledTracks[0].name);
-    } else {
-      // Sequential play
-      // TODO: Implement play logic
-      console.log("Playing tracks in order starting from:", tracks[currentIndex].name);
+  // Handle play
+  const handlePlay = (track) => {
+    if (track) {
+      setPlayingTrack(track);
+      router.push("/music");
     }
   };
 
+  // Toggle favorite status
   const handleToggleFavorite = async (trackId) => {
     try {
-      // Update local state
       const updatedTracks = tracks.map(track => 
         track.id === trackId ? { ...track, favorite: !track.favorite } : track
       );
-      setTracks(updatedTracks.filter(track => track.favorite)); // Keep only favorite tracks
+      // Update local state
+      setTracks(updatedTracks.filter(track => track.favorite));
+      // Update global state
+      updateTrack(trackId, { favorite: !tracks.find(t => t.id === trackId).favorite });
     } catch (error) {
       console.error("Error toggling favorite:", error);
     }
   };
 
-  // Handle artist navigation
-  const handleArtistPress = (artistName) => {
-    router.push({
-      pathname: "/artist/[name]",
-      params: { name: artistName }
-    });
-  };
-
-  // Play all tracks in the list
+  // Play all tracks
   const handlePlayAll = () => {
     if (tracks.length > 0) {
-      if (isRandom) {
-        // Random play logic
-        const randomIndex = Math.floor(Math.random() * tracks.length);
-        handlePlay(tracks[randomIndex].id);
-      } else {
-        // Sequential play, start from the first track
-        handlePlay(tracks[0].id);
-      }
+      const trackToPlay = isRandom 
+        ? tracks[Math.floor(Math.random() * tracks.length)]
+        : tracks[0];
+      handlePlay(trackToPlay);
     }
   };
 
-  // Toggle random play state
+  // Toggle random state
   const toggleRandom = () => {
     setIsRandom(!isRandom);
   };
@@ -120,7 +104,7 @@ const FavListScreen = () => {
       {/* Playlist */}
       <ScrollView
         showsVerticalScrollIndicator={true}
-        className="flex-1"
+        className="flex-1 mb-24"
       >
         {tracks.length === 0 ? (
           <Text className="text-center text-gray-500 mt-10">
@@ -135,14 +119,20 @@ const FavListScreen = () => {
                 artist={track.artist}
                 duration={track.duration}
                 favorite={track.favorite}
-                onPlay={() => handlePlay(track.id)}
+                onPlay={() => handlePlay(track)}
                 onToggleFavorite={() => handleToggleFavorite(track.id)}
-                onArtistPress={() => handleArtistPress(track.artist)}
+                onArtistPress={() => router.push({
+                  pathname: "/artist/[name]",
+                  params: { name: track.artist }
+                })}
               />
             </View>
           ))
         )}
       </ScrollView>
+
+      {/* Now Playing */}
+      <NowPlaying />
     </View>
   );
 };

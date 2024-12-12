@@ -2,9 +2,9 @@ import { Stack } from "expo-router";
 import { NativeWindStyleSheet } from "nativewind";
 import { TracksProvider } from "./context/TrackProvider";
 
-NativeWindStyleSheet.setOutput({
-  default: "native",
-});
+// NativeWindStyleSheet.setOutput({
+//   default: "native",
+// });
 
 export default function Layout() {
   return (
