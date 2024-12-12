@@ -4,9 +4,12 @@ const TracksContext = createContext();
 
 export const TracksProvider = ({ children }) => {
   const [tracks, setTracks] = useState([]);
-  const [playingTrack, setPlayingTrack] = useState(null);
+  const [playingTrack, setPlayingTrack] = useState(null); // Current playing track
+  const [isPlaying, setIsPlaying] = useState(false); // Playback state
+  const [currentTime, setCurrentTime] = useState(0); // Playback progress in seconds
+  const [playMode, setPlayMode] = useState("order"); // Play mode: 'order' or 'shuffle'
 
-  // Update a specific track by id
+  // Update a specific track
   const updateTrack = (id, updatedData) => {
     setTracks((prevTracks) =>
       prevTracks.map((track) =>
@@ -14,8 +17,33 @@ export const TracksProvider = ({ children }) => {
       )
     );
   };
-  const getTrackById = (id) => {
-    return tracks.find((track) => track.id === id);
+
+  // Play the next track
+  const playNextTrack = () => {
+    if (!playingTrack || tracks.length === 0) return;
+    const currentIndex = tracks.findIndex(
+      (track) => track.id === playingTrack.id
+    );
+    if (playMode === "shuffle") {
+      const nextIndex = Math.floor(Math.random() * tracks.length);
+      setPlayingTrack(tracks[nextIndex]);
+      setCurrentTime(0);
+    } else {
+      const nextIndex = (currentIndex + 1) % tracks.length;
+      setPlayingTrack(tracks[nextIndex]);
+      setCurrentTime(0);
+    }
+  };
+
+  // Play the previous track
+  const playPreviousTrack = () => {
+    if (!playingTrack || tracks.length === 0) return;
+    const currentIndex = tracks.findIndex(
+      (track) => track.id === playingTrack.id
+    );
+    const prevIndex = (currentIndex - 1 + tracks.length) % tracks.length;
+    setPlayingTrack(tracks[prevIndex]);
+    setCurrentTime(0);
   };
 
   return (
@@ -23,10 +51,17 @@ export const TracksProvider = ({ children }) => {
       value={{
         tracks,
         setTracks,
-        updateTrack,
-        getTrackById,
         playingTrack,
         setPlayingTrack,
+        isPlaying,
+        setIsPlaying,
+        currentTime,
+        setCurrentTime,
+        playMode,
+        setPlayMode,
+        updateTrack,
+        playNextTrack,
+        playPreviousTrack,
       }}
     >
       {children}
