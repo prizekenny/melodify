@@ -1,12 +1,6 @@
-import React from "react";
-import {
-  View,
-  Text,
-  Image,
-  FlatList,
-  ScrollView,
-  TouchableOpacity,
-} from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, Text, Image, ScrollView } from "react-native";
+
 import { useTracks } from "../context/TrackProvider";
 import PublicPlaylistItem from "../../components/PublicPlayListItem";
 import { useRouter } from "expo-router";
@@ -20,13 +14,12 @@ const ProfileScreen = () => {
     router.push("/music");
   };
 
-  console.log("tracks### ", tracks);
   return (
     <ScrollView className="flex-1 bg-background">
       {/* Top Section */}
       <View className="bg-white rounded-b-3xl shadow-md p-6 items-center">
         <Image
-          source={require("../../assets/images/profile_image1.png")}
+          source={{ uri: "https://picsum.photos/200?random=1001" }}
           className="w-24 h-24 rounded-full mb-4"
         />
         <Text className="text-textSecondary">soroushnorozynui@gmail.com</Text>

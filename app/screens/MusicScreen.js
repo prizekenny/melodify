@@ -1,7 +1,6 @@
 import React from "react";
 import { View, Text, TouchableOpacity, Image } from "react-native";
 
-import { useRouter, useSearchParams } from "expo-router";
 import { useTracks } from "../context/TrackProvider";
 
 const MusicScreen = () => {
