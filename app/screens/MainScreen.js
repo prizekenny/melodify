@@ -6,12 +6,12 @@ import Logo from "../../components/Logo";
 import PlaylistItem from "../../components/PlayListItem";
 import { useRouter } from "expo-router";
 import { getNewAlbums, getTracks, updateTrack } from "../api/music";
+import { useTracks } from "../context/TrackProvider";
+import NowPlaying from "../../components/NowPlaying";
 
 const MainScreen = () => {
   const [newAlbums, setNewAlbums] = useState([]);
-  const [tracks, setTracks] = useState([]);
-  const router = useRouter();
-
+  const { tracks, setTracks, updateTrack, setPlayingTrack } = useTracks();
   useEffect(() => {
     // fetch new albums
     const fetchNewAlbums = async () => {
@@ -37,10 +37,8 @@ const MainScreen = () => {
   }, []);
 
   const handlePlay = (track) => {
-    router.push({
-      pathname: "/screens/MusicScreen",
-      params: track,
-    });
+    setPlayingTrack(track);
+    router.push("/music");
   };
 
   const handleArtistPress = (artistName) => {
@@ -51,25 +49,14 @@ const MainScreen = () => {
   };
 
   const handleToggleFavorite = async (id) => {
-    const newTracks = tracks.map((item) =>
-      item.id === id ? { ...item, favorite: !item.favorite } : item
-    );
-    setTracks(newTracks);
-
-    const updatedTrack = tracks.find((item) => item.id === id);
-    try {
-      const data = await updateTrack(id, {
-        ...updatedTrack,
-        favorite: !updatedTrack.favorite,
-      });
-      return data;
-    } catch (error) {
-      console.error("Error updating track:", error);
+    const updatedTrack = tracks.find((track) => track.id === id);
+    if (updatedTrack) {
+      updateTrack(id, { favorite: !updatedTrack.favorite });
     }
   };
 
   return (
-    <View className="bg-background flex-1 flex-col px-5 pt-8">
+    <View className="bg-background flex-1 flex-col px-5">
       {/* Header */}
       <View className="items-center">
         <Logo imageSize={80} fontSize={30} />
@@ -119,7 +106,7 @@ const MainScreen = () => {
           showsVerticalScrollIndicator={true}
           keyboardShouldPersistTaps="handled"
           nestedScrollEnabled={true}
-          className="gap-2"
+          className="gap-2 pb-24"
         >
           {tracks.length == 0 && <Text>Loading...</Text>}
           {tracks.map((track, index) => (
@@ -137,6 +124,11 @@ const MainScreen = () => {
             </View>
           ))}
         </ScrollView>
+      </View>
+
+      {/* Now Playing */}
+      <View className="pr-24">
+        <NowPlaying />
       </View>
     </View>
   );
