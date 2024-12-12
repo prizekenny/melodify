@@ -1,80 +1,60 @@
 // app/screens/ArtistScreen.js
 import { View, Text, ScrollView } from "react-native";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import ArtistProfile from "../../components/ArtistProfile";
 import AlbumCard from "../../components/AlbumCard";
 import PlaylistItem from "../../components/PlayListItem";
 import { usePlaylist } from "../../hooks/usePlaylist";
+import { getNewAlbums, getTracks } from "../api/music";
 
-const ArtistScreen = ({ route }) => {
-  const { artistId } = route.params;
+const ArtistScreen = ({ artist }) => {
   const navigation = useNavigation();
-
-  const artistsInfo = {
-    artist_1: {
-      imageUrl: "https://example.com/weeknd.jpg",
-      artistId: "artist_1",
-      artistName: "The Weeknd",
-      albumCount: 4,
-      songCount: 52,
-      biography: "Abel Makkonen Tesfaye, known professionally as The Weeknd...",
-    },
-    artist_2: {
-      imageUrl: "https://example.com/edsheeran.jpg",
-      artistId: "artist_2",
-      artistName: "Ed Sheeran",
-      albumCount: 5,
-      songCount: 89,
-      biography:
-        "Edward Christopher Sheeran MBE is an English singer-songwriter...",
-    },
-    artist_3: {
-      imageUrl: "https://example.com/dualipa.jpg",
-      artistId: "artist_3",
-      artistName: "Dua Lipa",
-      albumCount: 2,
-      songCount: 28,
-      biography: "Dua Lipa is an English singer and songwriter...",
-    },
-    artist_4: {
-      imageUrl: "https://example.com/adele.jpg",
-      artistId: "artist_4",
-      artistName: "Adele",
-      albumCount: 4,
-      songCount: 48,
-      biography:
-        "Adele Laurie Blue Adkins MBE is an English singer and songwriter...",
-    },
-    artist_5: {
-      imageUrl: "https://example.com/billieeilish.jpg",
-      artistId: "artist_5",
-      artistName: "Billie Eilish",
-      albumCount: 2,
-      songCount: 32,
-      biography:
-        "Billie Eilish Pirate Baird O'Connell is an American singer-songwriter...",
-    },
-  };
-
-  const artistInfo = artistsInfo[artistId] || {
-    imageUrl: "https://example.com/default.jpg",
-    artistId: artistId,
-    artistName: "Unknown Artist",
+  const [artistInfo, setArtistInfo] = useState({
+    cover: "https://example.com/default.jpg",
+    artist: artist || "Loading...",
     albumCount: 0,
     songCount: 0,
-    biography: "No biography available",
-  };
+    biography: "Loading...",
+  });
+  const [newAlbums, setNewAlbums] = useState([]);
+  const [tracks, setTracks] = useState([]);
 
-  const albums = [];
+  useEffect(() => {
+    const fetchArtistData = async () => {
+      try {
+        // 获取艺术家的专辑
+        const albumsData = await getNewAlbums();
+        // 过滤出属于当前艺术家的专辑
+        const artistAlbums = albumsData.filter(album => album.artist === artist);
+        setNewAlbums(artistAlbums);
 
-  const { initialPlaylist } = require("./MainScreen");
+        // 获取艺术家的歌曲
+        const tracksData = await getTracks();
+        // 过滤出属于当前艺术家的歌曲
+        const artistTracks = tracksData.filter(track => track.artist === artist);
+        setTracks(artistTracks);
 
-  const artistSongs = initialPlaylist.filter(
-    (song) => song.artistId === artistId
-  );
+        // 更新艺术家信息
+        if (artistTracks.length > 0) {
+          setArtistInfo(prev => ({
+            ...prev,
+            cover: artistTracks[0].cover,
+            artist: artist,
+            albumCount: new Set(artistTracks.map(track => track.album)).size,
+            songCount: artistTracks.length,
+            biography: "Biography will be added later...", // 这个信息在当前API中没有
+          }));
+        }
+      } catch (error) {
+        console.error("Error fetching artist data:", error);
+      }
+    };
 
-  const { handlePlay, handleToggleFavorite } = usePlaylist(artistSongs);
+    fetchArtistData();
+  }, [artist]);
+
+  const { handlePlay, handleToggleFavorite } = usePlaylist(tracks);
 
   const handlePlayAlbum = (albumId) => {
     // TODO: 实现专辑播放逻辑
@@ -93,13 +73,12 @@ const ArtistScreen = ({ route }) => {
         showsHorizontalScrollIndicator={false}
         className="gap-4"
       >
-        {albums.map((album) => (
+        {newAlbums.map((album) => (
           <AlbumCard
             key={album.id}
-            imgURL={album.coverUrl}
+            imgURL={album.cover}
             albumName={album.name}
-            artistId={artistInfo.artistId}
-            artistName={artistInfo.artistName}
+            artistName={album.artist}
             onPlay={() => handlePlayAlbum(album.id)}
           />
         ))}
@@ -108,17 +87,16 @@ const ArtistScreen = ({ route }) => {
       {/* Songs */}
       <Text className="text-textPrimary text-xl mt-6 mb-4">Songs</Text>
       <ScrollView showsVerticalScrollIndicator={true} className="gap-2">
-        {artistSongs.map((song) => (
-          <View key={song.id}>
+        {tracks.map((track) => (
+          <View key={track.id}>
             <PlaylistItem
-              id={song.id}
-              songName={song.name}
-              artistId={song.artistId}
-              artistName={song.artist}
-              duration={song.duration}
-              isFavorite={song.isFavorite}
-              onPlay={() => handlePlay(song.id)}
-              onToggleFavorite={() => handleToggleFavorite(song.id)}
+              id={track.id}
+              songName={track.name}
+              artistName={track.artist}
+              duration={track.duration}
+              isFavorite={track.favorite}
+              onPlay={() => handlePlay(track.id)}
+              onToggleFavorite={() => handleToggleFavorite(track.id)}
             />
           </View>
         ))}

@@ -10,6 +10,8 @@ import { getNewAlbums, getTracks, updateTrack } from "../api/music";
 const MainScreen = () => {
   const [newAlbums, setNewAlbums] = useState([]);
   const [tracks, setTracks] = useState([]);
+  const router = useRouter();
+
   useEffect(() => {
     // fetch new albums
     const fetchNewAlbums = async () => {
@@ -34,13 +36,20 @@ const MainScreen = () => {
     fetchTracks();
   }, []);
 
-  const router = useRouter();
   const handlePlay = (track) => {
     router.push({
       pathname: "/music",
       params: track,
     });
   };
+
+  const handleArtistPress = (artistName) => {
+    router.push({
+      pathname: "/artist/[name]",
+      params: { name: artistName }
+    });
+  };
+
   const handleToggleFavorite = async (id) => {
     const newTracks = tracks.map((item) =>
       item.id === id ? { ...item, favorite: !item.favorite } : item
@@ -70,11 +79,11 @@ const MainScreen = () => {
       {newAlbums.length == 0 && <Text>Loading...</Text>}
       {newAlbums.length > 0 && (
         <View className="flex-col mb-5">
-          {/* <Text className="text-black mb-5 text-2xl">New Album</Text> */}
           <NewAlbum
             album={newAlbums[0].name}
             artist={newAlbums[0].artist}
             cover={newAlbums[0].cover}
+            onArtistPress={() => handleArtistPress(newAlbums[0].artist)}
           />
         </View>
       )}
@@ -91,12 +100,12 @@ const MainScreen = () => {
         >
           {tracks.length == 0 && <Text>Loading...</Text>}
           {tracks.map((track, index) => (
-            /* must use View to wrap PlaylistItem, otherwise the parent gap does not work */
             <View key={index}>
               <MusicCard
                 cover={track.cover}
                 name={track.name}
                 artist={track.artist}
+                onArtistPress={() => handleArtistPress(track.artist)}
               />
             </View>
           ))}
@@ -114,7 +123,6 @@ const MainScreen = () => {
         >
           {tracks.length == 0 && <Text>Loading...</Text>}
           {tracks.map((track, index) => (
-            /* must use View to wrap PlaylistItem, otherwise the parent gap does not work */
             <View key={index}>
               <PlaylistItem
                 id={track.id}
@@ -124,6 +132,7 @@ const MainScreen = () => {
                 favorite={track.favorite}
                 onPlay={() => handlePlay(track)}
                 onToggleFavorite={() => handleToggleFavorite(track.id)}
+                onArtistPress={() => handleArtistPress(track.artist)}
               />
             </View>
           ))}

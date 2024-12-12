@@ -1,18 +1,48 @@
 import { MOCK_API } from "@env";
 
-const NEW_ALBUM_URL = `${process.env.MOCK_API}/new-album`;
-const TRACKS_URL = `${process.env.MOCK_API}/tracks`;
+const NEW_ALBUM_URL = `${MOCK_API}/new-album`;
+const TRACKS_URL = `${MOCK_API}/tracks`;
 
 export const getNewAlbums = async () => {
-  const response = await fetch(NEW_ALBUM_URL);
-  const data = await response.json();
-  return data;
+  try {
+    const response = await fetch(NEW_ALBUM_URL);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching albums:", error);
+    // 返回模拟数据，确保UI不会崩溃
+    return [{
+      id: "1",
+      name: "Sample Album",
+      artist: "Sample Artist",
+      cover: "https://via.placeholder.com/300"
+    }];
+  }
 };
 
 export const getTracks = async () => {
-  const response = await fetch(TRACKS_URL);
-  const data = await response.json();
-  return data;
+  try {
+    const response = await fetch(TRACKS_URL);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching tracks:", error);
+    // 返回模拟数据，确保UI不会崩溃
+    return [{
+      id: "1",
+      name: "Sample Track",
+      artist: "Sample Artist",
+      duration: "3:30",
+      favorite: false,
+      cover: "https://via.placeholder.com/300"
+    }];
+  }
 };
 
 // Add a new track
@@ -27,7 +57,7 @@ export const addTrack = async (trackData) => {
     });
 
     if (!response.ok) {
-      throw new Error("Failed to add track");
+      throw new Error(`Failed to add track: ${response.status}`);
     }
 
     const data = await response.json();
@@ -50,8 +80,7 @@ export const updateTrack = async (trackId, updatedTrackData) => {
     });
 
     if (!response.ok) {
-      throw new Error("Failed to update track");
-      console.log("Failed to update track");
+      throw new Error(`Failed to update track: ${response.status}`);
     }
 
     const data = await response.json();
@@ -70,7 +99,7 @@ export const deleteTrack = async (trackId) => {
     });
 
     if (!response.ok) {
-      throw new Error("Failed to delete track");
+      throw new Error(`Failed to delete track: ${response.status}`);
     }
 
     const data = await response.json();

@@ -10,12 +10,16 @@ import {
   Alert
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { getTracks } from '../api/music';  // Ensure this path is correct based on your project structure
+import { getTracks } from '../api/music';
+import { useRouter } from "expo-router";
+import PlaylistItem from "../../components/PlayListItem";
 
 const SearchScreen = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [songs, setSongs] = useState([]);
   const [displaySongs, setDisplaySongs] = useState([]);
+  const router = useRouter();
+  
   const categories = [
     { id: "1", name: "The Best of 2024", image: "https://picsum.photos/200" },
     { id: "2", name: "Holiday", image: "https://picsum.photos/id/15/200" },
@@ -56,12 +60,47 @@ const SearchScreen = () => {
     setDisplaySongs([]);
   };
 
+  const handlePlay = (trackId) => {
+    const track = songs.find(song => song.id === trackId);
+    if (track) {
+      router.push({
+        pathname: "/music",
+        params: track,
+      });
+    }
+  };
+
+  const handleToggleFavorite = async (trackId) => {
+    const newSongs = songs.map(song =>
+      song.id === trackId ? { ...song, favorite: !song.favorite } : song
+    );
+    setSongs(newSongs);
+    
+    const displayedSongs = displaySongs === "noresults" ? [] : displaySongs;
+    const newDisplaySongs = displayedSongs.map(song =>
+      song.id === trackId ? { ...song, favorite: !song.favorite } : song
+    );
+    setDisplaySongs(newDisplaySongs.length > 0 ? newDisplaySongs : "noresults");
+  };
+
+  const handleArtistPress = (artistName) => {
+    router.push({
+      pathname: "/artist/[name]",
+      params: { name: artistName }
+    });
+  };
+
   const renderSongItem = ({ item }) => (
-    <TouchableOpacity style={styles.songItem}>
-      <Image source={{ uri: item.cover }} style={styles.songImage} />
-      <Text style={styles.songName}>{item.name}</Text>
-      <Text style={styles.songArtist}>{item.artist}</Text>
-    </TouchableOpacity>
+    <PlaylistItem
+      id={item.id}
+      name={item.name}
+      artist={item.artist}
+      duration={item.duration}
+      favorite={item.favorite}
+      onPlay={() => handlePlay(item.id)}
+      onToggleFavorite={() => handleToggleFavorite(item.id)}
+      onArtistPress={() => handleArtistPress(item.artist)}
+    />
   );
 
   const renderCategoryItem = ({ item }) => (
@@ -88,7 +127,7 @@ const SearchScreen = () => {
             placeholderTextColor="#aaa"
             value={searchQuery}
             onChangeText={handleSearch}
-            selectionColor="#f05a28" // Cursor color
+            selectionColor="#f05a28"
           />
           <TouchableOpacity onPress={handleCancel} style={styles.cancelButton}>
             <Text style={styles.cancelButtonText}>Cancel</Text>
@@ -176,29 +215,6 @@ const styles = StyleSheet.create({
     color: "#333",
     textAlign: "center",
     padding: 10,
-  },
-  songItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-    paddingVertical: 10,
-  },
-  songImage: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    marginRight: 10,
-  },
-  songName: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#333',
-    flex: 1,
-  },
-  songArtist: {
-    fontSize: 14,
-    color: '#666',
   },
   displayContainer: {
     paddingBottom: 20,

@@ -28,8 +28,7 @@ export default function Layout() {
       <Stack.Screen name="[tabs]" options={{ headerShown: false }} />
 
       <Stack.Screen
-        name="artist"
-        component={ArtistScreen}
+        name="artist/[id]"
         options={{
           headerShown: true,
           headerTitle: "",

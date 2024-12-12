@@ -1,7 +1,8 @@
-import { View, Text, Image } from "react-native";
+import { View, Text, Image, TouchableOpacity } from "react-native";
 import React from "react";
+import { Ionicons } from "@expo/vector-icons";
 
-const MusicCard = ({ cover, name, artist, onPlay }) => {
+const MusicCard = ({ cover, name, artist, onPlay, onArtistPress }) => {
   return (
     <View className="flex-1 w-36 flex-column rounded-lg">
       {/* Image and play button */}
@@ -30,13 +31,15 @@ const MusicCard = ({ cover, name, artist, onPlay }) => {
         >
           {name}
         </Text>
-        <Text
-          className="text-sm text-gray-600"
-          numberOfLines={1} // Limit to single line
-          ellipsizeMode="tail" // Display as ... when exceeding
-        >
-          {artist}
-        </Text>
+        <TouchableOpacity onPress={onArtistPress}>
+          <Text
+            className="text-sm text-gray-600"
+            numberOfLines={1} // Limit to single line
+            ellipsizeMode="tail" // Display as ... when exceeding
+          >
+            {artist}
+          </Text>
+        </TouchableOpacity>
       </View>
     </View>
   );

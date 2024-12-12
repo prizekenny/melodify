@@ -1,28 +1,21 @@
 import React from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
 
 const PlaylistItem = ({
   id,
   name,
   artist,
-  artistId,
   duration,
   favorite,
   onPlay,
   onToggleFavorite,
+  onArtistPress,
 }) => {
-  const navigation = useNavigation();
-
-  const handleArtistPress = () => {
-    navigation.navigate("artist", { artistId });
-  };
-
   return (
     <View className="flex-row items-center justify-between bg-background mr-2 rounded-lg p-1 shadow-md">
       {/* Play button */}
-      <TouchableOpacity onPress={onPlay} className="p-2">
+      <TouchableOpacity onPress={() => onPlay(id)} className="p-2">
         <Ionicons name="play" size={24} color="#4CAF50" />
       </TouchableOpacity>
 
@@ -31,7 +24,7 @@ const PlaylistItem = ({
         <Text className="text-base font-bold text-gray-900" numberOfLines={1}>
           {name}
         </Text>
-        <TouchableOpacity onPress={handleArtistPress}>
+        <TouchableOpacity onPress={onArtistPress}>
           <Text className="text-sm text-gray-600" numberOfLines={1}>
             {artist}
           </Text>
@@ -43,11 +36,7 @@ const PlaylistItem = ({
         <Text className="text-sm text-gray-600 mr-3">
           {formatDuration(duration)}
         </Text>
-        <TouchableOpacity
-          onPress={() => {
-            onToggleFavorite(id);
-          }}
-        >
+        <TouchableOpacity onPress={onToggleFavorite}>
           <Ionicons
             name={favorite ? "heart" : "heart-outline"}
             size={20}

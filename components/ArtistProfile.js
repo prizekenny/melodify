@@ -2,8 +2,8 @@ import { View, Text, Image } from "react-native";
 import React from "react";
 
 const ArtistProfile = ({
-  imageUrl,
-  artistName,
+  cover,
+  artist,
   albumCount,
   songCount,
   biography,
@@ -12,13 +12,13 @@ const ArtistProfile = ({
     <View className="w-full flex-col items-center">
       {/* Artist Image */}
       <Image
-        source={{ uri: imageUrl || "https://via.placeholder.com/300" }}
+        source={{ uri: cover || "https://via.placeholder.com/300" }}
         className="w-full h-48 rounded-3xl"
       />
 
       {/* Artist Name */}
       <Text className="text-2xl font-bold text-textPrimary mt-4">
-        {artistName}
+        {artist}
       </Text>
 
       {/* Stats */}
