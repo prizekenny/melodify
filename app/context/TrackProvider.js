@@ -1,4 +1,9 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
+import {
+  addTrack as apiAddTrack,
+  updateTrack as apiUpdateTrack,
+  deleteTrack as apiDeleteTrack,
+} from "../api/music";
 
 const TracksContext = createContext();
 
@@ -89,11 +94,97 @@ export const TracksProvider = ({ children }) => {
     });
   };
 
+  // Add a new track
+  const addTrack = async (newTrack) => {
+    // Check for duplicates
+    const isDuplicate = tracks.some(
+      (track) =>
+        track.name.toLowerCase() === newTrack.name.toLowerCase() &&
+        track.artist.toLowerCase() === newTrack.artist.toLowerCase()
+    );
+
+    if (isDuplicate) {
+      alert("Track already exists.");
+      console.log("Track already exists, skipping addition.");
+      return;
+    }
+
+    try {
+      const addedTrack = await apiAddTrack(newTrack);
+
+      setTracks((prevTracks) => [...prevTracks, addedTrack]);
+      if (
+        playingTrack &&
+        playingTrack.name === newTrack.name &&
+        playingTrack.artist === newTrack.artist
+      ) {
+        setPlayingTrack((prev) => ({ ...prev, id: addedTrack.id }));
+      }
+    } catch (error) {
+      console.error("Error adding track:", error);
+    }
+  };
+  // Update a track by ID (e.g., toggle favorite)
+  const updateTrack = async (id, updatedData) => {
+    setTracks((prevTracks) =>
+      prevTracks.map((track) =>
+        track.id === id ? { ...track, ...updatedData } : track
+      )
+    );
+    if (playingTrack?.id === id) {
+      setPlayingTrack((prev) => ({ ...prev, ...updatedData }));
+    }
+
+    // Call API to persist changes
+    try {
+      await apiUpdateTrack(id, updatedData);
+    } catch (error) {
+      console.error("Error updating track on server:", error);
+    }
+  };
+
+  // Delete a track by ID
+  const deleteTrack = async (id) => {
+    setTracks((prevTracks) => prevTracks.filter((track) => track.id !== id));
+
+    // if (playingTrack?.id === id) {
+    //   setPlayingTrack(null);
+    //   setCurrentTime(0);
+    //   setIsPlaying(false);
+    // }
+
+    try {
+      await apiDeleteTrack(id);
+    } catch (error) {
+      console.error("Error deleting track on server:", error);
+    }
+  };
+
+  // Determine if the track is in the collection
+  const isTrackInCollection = (track) => {
+    return tracks.some(
+      (item) =>
+        item.name.toLowerCase() === track.name.toLowerCase() &&
+        item.artist.toLowerCase() === track.artist.toLowerCase()
+    );
+  };
+  // Toggle track's inclusion in the collection
+  const toggleTrackInCollection = (track) => {
+    if (isTrackInCollection(track)) {
+      deleteTrack(track.id);
+    } else {
+      addTrack(track);
+    }
+  };
+
   return (
     <TracksContext.Provider
       value={{
         tracks,
         setTracks,
+        addTrack,
+        updateTrack,
+        deleteTrack,
         playingTrack,
         setPlayingTrack,
         currentTime,
@@ -104,6 +195,8 @@ export const TracksProvider = ({ children }) => {
         playPreviousTrack,
         playMode,
         togglePlayMode,
+        toggleTrackInCollection,
+        isTrackInCollection,
       }}
     >
       {children}

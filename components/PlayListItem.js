@@ -40,7 +40,7 @@ const PlaylistItem = ({
           <Ionicons
             name={favorite ? "heart" : "heart-outline"}
             size={20}
-            color={favorite ? "red" : "gray"}
+            color={favorite ? "#FF914D" : "gray"}
           />
         </TouchableOpacity>
       </View>
