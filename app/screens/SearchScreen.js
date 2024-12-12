@@ -64,7 +64,7 @@ const SearchScreen = () => {
     const track = songs.find(song => song.id === trackId);
     if (track) {
       router.push({
-        pathname: "/music",
+        pathname: "/screens/MusicScreen",
         params: track,
       });
     }

@@ -1,7 +1,7 @@
 // app/screens/ArtistScreen.js
 import { View, Text, ScrollView } from "react-native";
 import React, { useState, useEffect } from "react";
-import { useNavigation } from "@react-navigation/native";
+import { useRouter } from "expo-router";
 import ArtistProfile from "../../components/ArtistProfile";
 import AlbumCard from "../../components/AlbumCard";
 import PlaylistItem from "../../components/PlayListItem";
@@ -9,7 +9,7 @@ import { usePlaylist } from "../../hooks/usePlaylist";
 import { getNewAlbums, getTracks } from "../api/music";
 
 const ArtistScreen = ({ artist }) => {
-  const navigation = useNavigation();
+  const router = useRouter();
   const [artistInfo, setArtistInfo] = useState({
     cover: "https://example.com/default.jpg",
     artist: artist || "Loading...",
@@ -19,23 +19,19 @@ const ArtistScreen = ({ artist }) => {
   });
   const [newAlbums, setNewAlbums] = useState([]);
   const [tracks, setTracks] = useState([]);
+  const { handleToggleFavorite } = usePlaylist(tracks);
 
   useEffect(() => {
     const fetchArtistData = async () => {
       try {
-        // 获取艺术家的专辑
         const albumsData = await getNewAlbums();
-        // 过滤出属于当前艺术家的专辑
         const artistAlbums = albumsData.filter(album => album.artist === artist);
         setNewAlbums(artistAlbums);
 
-        // 获取艺术家的歌曲
         const tracksData = await getTracks();
-        // 过滤出属于当前艺术家的歌曲
         const artistTracks = tracksData.filter(track => track.artist === artist);
         setTracks(artistTracks);
 
-        // 更新艺术家信息
         if (artistTracks.length > 0) {
           setArtistInfo(prev => ({
             ...prev,
@@ -43,7 +39,7 @@ const ArtistScreen = ({ artist }) => {
             artist: artist,
             albumCount: new Set(artistTracks.map(track => track.album)).size,
             songCount: artistTracks.length,
-            biography: "Biography will be added later...", // 这个信息在当前API中没有
+            biography: "Biography will be added later...",
           }));
         }
       } catch (error) {
@@ -54,11 +50,14 @@ const ArtistScreen = ({ artist }) => {
     fetchArtistData();
   }, [artist]);
 
-  const { handlePlay, handleToggleFavorite } = usePlaylist(tracks);
-
-  const handlePlayAlbum = (albumId) => {
-    // TODO: 实现专辑播放逻辑
-    handlePlay(albumId);
+  const handlePlay = (trackId) => {
+    const track = tracks.find(track => track.id === trackId);
+    if (track) {
+      router.push({
+        pathname: "/screens/MusicScreen",
+        params: track
+      });
+    }
   };
 
   return (
@@ -79,7 +78,7 @@ const ArtistScreen = ({ artist }) => {
             imgURL={album.cover}
             albumName={album.name}
             artistName={album.artist}
-            onPlay={() => handlePlayAlbum(album.id)}
+            onPlay={() => handlePlay(album.id)}
           />
         ))}
       </ScrollView>
@@ -91,10 +90,10 @@ const ArtistScreen = ({ artist }) => {
           <View key={track.id}>
             <PlaylistItem
               id={track.id}
-              songName={track.name}
-              artistName={track.artist}
+              name={track.name}
+              artist={track.artist}
               duration={track.duration}
-              isFavorite={track.favorite}
+              favorite={track.favorite}
               onPlay={() => handlePlay(track.id)}
               onToggleFavorite={() => handleToggleFavorite(track.id)}
             />

@@ -38,7 +38,7 @@ const MainScreen = () => {
 
   const handlePlay = (track) => {
     router.push({
-      pathname: "/music",
+      pathname: "/screens/MusicScreen",
       params: track,
     });
   };

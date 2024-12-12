@@ -1,9 +1,11 @@
 import { Stack } from "expo-router";
 import { NativeWindStyleSheet } from "nativewind";
 
+NativeWindStyleSheet.setOutput({
+  default: "native",
+});
+
 export default function Layout() {
-  // Without this line, only one tag in className will be output
-  NativeWindStyleSheet.setOutput({ default: "native" });
   return (
     <Stack
       initialRouteName="screens/LoadingScreen"
@@ -28,10 +30,18 @@ export default function Layout() {
       <Stack.Screen name="[tabs]" options={{ headerShown: false }} />
 
       <Stack.Screen
-        name="artist/[id]"
+        name="artist/[name]"
         options={{
           headerShown: true,
           headerTitle: "",
+          headerBackTitle: "",
+        }}
+      />
+      <Stack.Screen
+        name="screens/MusicScreen"
+        options={{
+          headerShown: true,
+          headerTitle: "Now Playing",
           headerBackTitle: "",
         }}
       />
