@@ -113,6 +113,13 @@ export const TracksProvider = ({ children }) => {
       const addedTrack = await apiAddTrack(newTrack);
 
       setTracks((prevTracks) => [...prevTracks, addedTrack]);
+      if (
+        playingTrack &&
+        playingTrack.name === newTrack.name &&
+        playingTrack.artist === newTrack.artist
+      ) {
+        setPlayingTrack((prev) => ({ ...prev, id: addedTrack.id }));
+      }
     } catch (error) {
       console.error("Error adding track:", error);
     }
@@ -135,19 +142,38 @@ export const TracksProvider = ({ children }) => {
       console.error("Error updating track on server:", error);
     }
   };
+
+  // Delete a track by ID
   const deleteTrack = async (id) => {
     setTracks((prevTracks) => prevTracks.filter((track) => track.id !== id));
 
-    if (playingTrack?.id === id) {
-      setPlayingTrack(null);
-      setCurrentTime(0);
-      setIsPlaying(false);
-    }
+    // if (playingTrack?.id === id) {
+    //   setPlayingTrack(null);
+    //   setCurrentTime(0);
+    //   setIsPlaying(false);
+    // }
 
     try {
       await apiDeleteTrack(id);
     } catch (error) {
       console.error("Error deleting track on server:", error);
+    }
+  };
+
+  // Determine if the track is in the collection
+  const isTrackInCollection = (track) => {
+    return tracks.some(
+      (item) =>
+        item.name.toLowerCase() === track.name.toLowerCase() &&
+        item.artist.toLowerCase() === track.artist.toLowerCase()
+    );
+  };
+  // Toggle track's inclusion in the collection
+  const toggleTrackInCollection = (track) => {
+    if (isTrackInCollection(track)) {
+      deleteTrack(track.id);
+    } else {
+      addTrack(track);
     }
   };
 
@@ -169,6 +195,8 @@ export const TracksProvider = ({ children }) => {
         playPreviousTrack,
         playMode,
         togglePlayMode,
+        toggleTrackInCollection,
+        isTrackInCollection,
       }}
     >
       {children}

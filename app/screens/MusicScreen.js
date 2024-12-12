@@ -18,7 +18,8 @@ const MusicScreen = () => {
     togglePlayMode,
     playMode,
     updateTrack,
-    addTrack,
+    isTrackInCollection,
+    toggleTrackInCollection,
   } = useTracks();
 
   const router = useRouter();
@@ -32,16 +33,13 @@ const MusicScreen = () => {
   };
 
   const handleToggleFavorite = async (id) => {
+    if (!isTrackInCollection(playingTrack)) {
+      return;
+    }
     if (playingTrack) {
       const newTrack = { ...playingTrack, favorite: !playingTrack.favorite };
       updateTrack(id, newTrack);
       setPlayingTrack(newTrack);
-    }
-  };
-
-  const handleAddTrack = async () => {
-    if (playingTrack) {
-      await addTrack(playingTrack);
     }
   };
 
@@ -95,8 +93,15 @@ const MusicScreen = () => {
               color={playingTrack.favorite ? "#E53935" : "gray"}
             />
           </TouchableOpacity>
-          <TouchableOpacity onPress={handleAddTrack}>
-            <Ionicons name="star-outline" size={28} color="#FFD700" />
+          {/* Star Icon */}
+          <TouchableOpacity
+            onPress={() => toggleTrackInCollection(playingTrack)}
+          >
+            <Ionicons
+              name={isTrackInCollection(playingTrack) ? "star" : "star-outline"}
+              size={28}
+              color={isTrackInCollection(playingTrack) ? "#FF914D" : "gray"}
+            />
           </TouchableOpacity>
         </View>
       </View>
