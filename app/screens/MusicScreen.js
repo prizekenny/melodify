@@ -1,13 +1,19 @@
 import React from "react";
 import { View, Text, TouchableOpacity, Image } from "react-native";
 
-const MusicScreen = ({ route, navigation }) => {
-  // Receive song data from navigation route
-  const { song } = route.params || {
-    title: "Default Song",
-    artist: "Default Artist",
-    cover: "https://example.com/album-cover.jpg",
-  };
+import { useRouter, useSearchParams } from "expo-router";
+import { useTracks } from "../context/TrackProvider";
+
+const MusicScreen = () => {
+  const { playingTrack } = useTracks();
+
+  if (!playingTrack) {
+    return (
+      <View className="flex-1 bg-background items-center justify-center">
+        <Text className="text-textPrimary text-lg">Track not found</Text>
+      </View>
+    );
+  }
 
   return (
     <View className="flex-1 bg-background p-4">
@@ -15,14 +21,16 @@ const MusicScreen = ({ route, navigation }) => {
       <View className="items-center">
         <Image
           source={
-            song.cover
-              ? { uri: song.cover }
+            playingTrack.cover
+              ? { uri: playingTrack.cover }
               : require("../../assets/images/default-cover.png")
           }
           className="w-40 h-40 mb-4 rounded"
         />
-        <Text className="text-textPrimary text-xl font-bold">{song.title}</Text>
-        <Text className="text-textSecondary">{song.artist}</Text>
+        <Text className="text-textPrimary text-xl font-bold">
+          {playingTrack.title}
+        </Text>
+        <Text className="text-textSecondary">{playingTrack.artist}</Text>
       </View>
 
       {/* Music Controls */}
@@ -39,10 +47,7 @@ const MusicScreen = ({ route, navigation }) => {
       </View>
 
       {/* View Lyrics Button */}
-      <TouchableOpacity
-        onPress={() => navigation.navigate("LyricsScreen", { song })}
-        className="mt-8 bg-secondary p-4 rounded"
-      >
+      <TouchableOpacity className="mt-8 bg-secondary p-4 rounded">
         <Text className="text-white text-center">View Lyrics</Text>
       </TouchableOpacity>
     </View>

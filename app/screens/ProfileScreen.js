@@ -7,57 +7,20 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
+import { useTracks } from "../context/TrackProvider";
+import PublicPlaylistItem from "../../components/PublicPlayListItem";
+import { useRouter } from "expo-router";
 
-const ProfileScreen = ({ navigation }) => {
-  const playlists = [
-    {
-      id: "1",
-      title: "Dont Smile At Me",
-      artist: "Billie Eilish",
-      duration: "5:33",
-      cover: require("../../assets/images/profile_image1.png"),
-    },
-    {
-      id: "2",
-      title: "As It Was",
-      artist: "Harry Styles",
-      duration: "5:33",
-      cover: require("../../assets/images/profile_image2.png"),
-    },
-    {
-      id: "3",
-      title: "Super Freaky Girl",
-      artist: "Nicki Minaj",
-      duration: "5:33",
-      cover: require("../../assets/images/profile_image3.png"),
-    },
-    {
-      id: "4",
-      title: "Bad Habit",
-      artist: "Steve Lacy",
-      duration: "5:33",
-      cover: require("../../assets/images/profile_image4.png"),
-    },
-    {
-      id: "5",
-      title: "Planet Her",
-      artist: "Doja Cat",
-      duration: "5:33",
-      cover: require("../../assets/images/profile_image5.png"),
-    },
-    {
-      id: "6",
-      title: "Sweetest Pie",
-      artist: "Megan Thee Stallion",
-      duration: "5:33",
-      cover: require("../../assets/images/profile_image6.png"),
-    },
-  ];
+const ProfileScreen = () => {
+  const { tracks, setPlayingTrack } = useTracks();
 
-  const handlePlay = (item) => {
-    navigation.navigate("MusicScreen", { song: item });
+  const router = useRouter();
+  const handlePlay = (track) => {
+    setPlayingTrack(track);
+    router.push("/music");
   };
 
+  console.log("tracks### ", tracks);
   return (
     <ScrollView className="flex-1 bg-background">
       {/* Top Section */}
@@ -85,23 +48,33 @@ const ProfileScreen = ({ navigation }) => {
         <Text className="text-textPrimary text-lg font-bold mb-4">
           Public Playlists
         </Text>
-        <FlatList
-          data={playlists}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <TouchableOpacity
-              onPress={() => handlePlay(item)}
-              className="flex-row items-center mb-4"
-            >
-              <Image source={item.cover} className="w-16 h-16 rounded" />
-              <View className="flex-1 mx-4">
-                <Text className="text-textPrimary font-bold">{item.title}</Text>
-                <Text className="text-textSecondary">{item.artist}</Text>
-              </View>
-              <Text className="text-textSecondary">{item.duration}</Text>
-            </TouchableOpacity>
-          )}
-        />
+        {tracks.length == 0 && <p>No Data</p>}
+        {tracks.length > 0 && (
+          <ScrollView
+            showsVerticalScrollIndicator={true}
+            keyboardShouldPersistTaps="handled"
+            nestedScrollEnabled={true}
+            className="gap-2"
+          >
+            {tracks.length == 0 && <Text>Loading...</Text>}
+            {tracks
+              .filter((track) => track.favorite)
+              .map((track, index) => (
+                /* must use View to wrap PlaylistItem, otherwise the parent gap does not work */
+                <View key={index}>
+                  <PublicPlaylistItem
+                    id={track.id}
+                    name={track.name}
+                    cover={track.cover}
+                    artist={track.artist}
+                    duration={track.duration}
+                    favorite={track.favorite}
+                    onPlay={() => handlePlay(track)}
+                  />
+                </View>
+              ))}
+          </ScrollView>
+        )}
       </View>
     </ScrollView>
   );

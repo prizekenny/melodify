@@ -6,10 +6,11 @@ import Logo from "../../components/Logo";
 import PlaylistItem from "../../components/PlayListItem";
 import { useRouter } from "expo-router";
 import { getNewAlbums, getTracks, updateTrack } from "../api/music";
+import { useTracks } from "../context/TrackProvider";
 
 const MainScreen = () => {
   const [newAlbums, setNewAlbums] = useState([]);
-  const [tracks, setTracks] = useState([]);
+  const { tracks, setTracks, updateTrack, setPlayingTrack } = useTracks();
   useEffect(() => {
     // fetch new albums
     const fetchNewAlbums = async () => {
@@ -36,26 +37,13 @@ const MainScreen = () => {
 
   const router = useRouter();
   const handlePlay = (track) => {
-    router.push({
-      pathname: "/music",
-      params: track,
-    });
+    setPlayingTrack(track);
+    router.push("/music");
   };
   const handleToggleFavorite = async (id) => {
-    const newTracks = tracks.map((item) =>
-      item.id === id ? { ...item, favorite: !item.favorite } : item
-    );
-    setTracks(newTracks);
-
-    const updatedTrack = tracks.find((item) => item.id === id);
-    try {
-      const data = await updateTrack(id, {
-        ...updatedTrack,
-        favorite: !updatedTrack.favorite,
-      });
-      return data;
-    } catch (error) {
-      console.error("Error updating track:", error);
+    const updatedTrack = tracks.find((track) => track.id === id);
+    if (updatedTrack) {
+      updateTrack(id, { favorite: !updatedTrack.favorite });
     }
   };
 
