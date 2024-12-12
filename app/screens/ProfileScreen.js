@@ -1,57 +1,30 @@
-import { NativeWindStyleSheet } from "nativewind";
-import React from "react";
-import { View, Text, Image, FlatList, TouchableOpacity } from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, Text, Image, ScrollView } from "react-native";
+
+import { useTracks } from "../context/TrackProvider";
+import PublicPlaylistItem from "../../components/PublicPlayListItem";
+import { useRouter } from "expo-router";
 
 const ProfileScreen = () => {
-  const playlists = [
-    {
-      id: "1",
-      title: "Dont Smile At Me",
-      artist: "Billie Eilish",
-      duration: "5:33",
-      cover: "https://example.com/cover1.jpg",
-    },
-    {
-      id: "2",
-      title: "As It Was",
-      artist: "Harry Styles",
-      duration: "5:33",
-      cover: "https://example.com/cover2.jpg",
-    },
-    {
-      id: "3",
-      title: "Super Freaky Girl",
-      artist: "Nicki Minaj",
-      duration: "5:33",
-      cover: "https://example.com/cover3.jpg",
-    },
-  ];
+  const { tracks, setPlayingTrack } = useTracks();
 
-  // Without this line, only one tag in className will be output
-  //NativeWindStyleSheet.setOutput({ default: "native" });
+  const router = useRouter();
+  const handlePlay = (track) => {
+    setPlayingTrack(track);
+    router.push("/music");
+  };
 
   return (
-    <View className="flex-1 bg-background">
-      <View className="flex-row justify-between items-center p-4">
-        <TouchableOpacity>
-          <Text>{"<"}</Text>
-        </TouchableOpacity>
-        <Text className="text-textPrimary text-lg font-bold">Profile</Text>
-        <TouchableOpacity>
-          <Text>⋮</Text>
-        </TouchableOpacity>
-      </View>
-
-      <View className="items-center p-4">
+    <ScrollView className="flex-1 bg-background">
+      {/* Top Section */}
+      <View className="bg-white rounded-b-3xl shadow-md p-6 items-center">
         <Image
-          source={{
-            uri: "https://example.com/profile-avatar.jpg",
-          }}
+          source={{ uri: "https://picsum.photos/200?random=1001" }}
           className="w-24 h-24 rounded-full mb-4"
         />
         <Text className="text-textSecondary">soroushnorozynui@gmail.com</Text>
-        <Text className="text-textPrimary text-xl font-bold">Sorouhsnrz</Text>
-        <View className="flex-row justify-between w-3/4 mt-4">
+        <Text className="text-textPrimary text-xl font-bold">Soroushnrz</Text>
+        <View className="flex-row justify-around w-full mt-4">
           <View className="items-center">
             <Text className="text-textPrimary font-bold">778</Text>
             <Text className="text-textSecondary">Followers</Text>
@@ -63,32 +36,40 @@ const ProfileScreen = () => {
         </View>
       </View>
 
+      {/* Public Playlists Section */}
       <View className="p-4">
         <Text className="text-textPrimary text-lg font-bold mb-4">
           Public Playlists
         </Text>
-        <FlatList
-          data={playlists}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <View className="flex-row justify-between items-center mb-4">
-              <Image
-                source={{ uri: item.cover }}
-                className="w-16 h-16 rounded"
-              />
-              <View className="flex-1 mx-4">
-                <Text className="text-textPrimary font-bold">{item.title}</Text>
-                <Text className="text-textSecondary">{item.artist}</Text>
-              </View>
-              <Text className="text-textSecondary">{item.duration}</Text>
-              <TouchableOpacity>
-                <Text>⋮</Text>
-              </TouchableOpacity>
-            </View>
-          )}
-        />
+        {tracks.length == 0 && <p>No Data</p>}
+        {tracks.length > 0 && (
+          <ScrollView
+            showsVerticalScrollIndicator={true}
+            keyboardShouldPersistTaps="handled"
+            nestedScrollEnabled={true}
+            className="gap-2"
+          >
+            {tracks.length == 0 && <Text>Loading...</Text>}
+            {tracks
+              .filter((track) => track.favorite)
+              .map((track, index) => (
+                /* must use View to wrap PlaylistItem, otherwise the parent gap does not work */
+                <View key={index}>
+                  <PublicPlaylistItem
+                    id={track.id}
+                    name={track.name}
+                    cover={track.cover}
+                    artist={track.artist}
+                    duration={track.duration}
+                    favorite={track.favorite}
+                    onPlay={() => handlePlay(track)}
+                  />
+                </View>
+              ))}
+          </ScrollView>
+        )}
       </View>
-    </View>
+    </ScrollView>
   );
 };
 

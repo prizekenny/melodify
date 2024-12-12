@@ -1,12 +1,15 @@
 import React from "react";
 import { View, Text, ScrollView, TouchableOpacity } from "react-native";
 
-const LyricsScreen = ({ navigation }) => {
+const LyricsScreen = ({ route, navigation }) => {
+  const { song } = route.params;
+
   const lyrics = [
-    "Line 1 of lyrics",
-    "Line 2 of lyrics",
-    "Line 3 of lyrics",
-    "Line 4 of lyrics",
+    `Lyrics for ${song.name} by ${song.artist}`,
+    "Line 1 of lyrics...",
+    "Line 2 of lyrics...",
+    "Line 3 of lyrics...",
+    "Line 4 of lyrics...",
   ];
 
   return (
