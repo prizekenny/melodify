@@ -17,6 +17,14 @@ export default function Layout() {
         name="screens/LoginScreen"
         options={{ title: "Login", headerShown: false }}
       />
+      <Stack.Screen
+        name="screens/ForgetPasswordScreen"
+        options={{ title: "Reset Password", headerShown: false }}
+      />
+      <Stack.Screen
+        name="screens/RegisterScreen"
+        options={{ title: "Register Account", headerShown: false }}
+      />
       <Stack.Screen name="[tabs]" options={{ headerShown: false }} />
     </Stack>
   );
