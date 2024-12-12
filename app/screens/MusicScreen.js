@@ -43,6 +43,8 @@ const MusicScreen = () => {
     }
   };
 
+  if (playingTrack === null) return null;
+
   return (
     <View className="flex-1 p-4 mt-14">
       {/* Navigation Bar */}
@@ -90,7 +92,7 @@ const MusicScreen = () => {
             <Ionicons
               name={playingTrack.favorite ? "heart" : "heart-outline"}
               size={28}
-              color={playingTrack.favorite ? "#E53935" : "gray"}
+              color={playingTrack.favorite ? "#FF914D" : "gray"}
             />
           </TouchableOpacity>
           {/* Star Icon */}
