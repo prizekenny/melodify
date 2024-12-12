@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from "react";
 import { View, Text, Image, ScrollView } from "react-native";
 
 import { useTracks } from "../context/TrackProvider";
@@ -17,7 +16,7 @@ const ProfileScreen = () => {
   return (
     <ScrollView className="flex-1 bg-background">
       {/* Top Section */}
-      <View className="bg-white rounded-b-3xl shadow-md p-6 items-center">
+      <View className="bg-white rounded-b-3xl shadow-md p-6 items-center pt-14">
         <Image
           source={{ uri: "https://picsum.photos/200?random=1001" }}
           className="w-24 h-24 rounded-full mb-4"
@@ -47,7 +46,8 @@ const ProfileScreen = () => {
             showsVerticalScrollIndicator={true}
             keyboardShouldPersistTaps="handled"
             nestedScrollEnabled={true}
-            className="gap-2"
+            contentContainerStyle={{ paddingBottom: 20 }}
+            className="gap-2 pb-24"
           >
             {tracks.length == 0 && <Text>Loading...</Text>}
             {tracks

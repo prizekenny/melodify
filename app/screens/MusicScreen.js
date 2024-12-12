@@ -1,51 +1,26 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { View, Text, TouchableOpacity, Image } from "react-native";
 import Slider from "@react-native-community/slider";
 import { useTracks } from "../context/TrackProvider";
 import { Ionicons, Feather } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
+
 const MusicScreen = () => {
   const {
     playingTrack,
-    updateTrack,
-    isPlaying,
-    setIsPlaying,
+    setPlayingTrack,
     currentTime,
-    setCurrentTime,
-    playMode,
-    setPlayMode,
+    isPlaying,
+    togglePlayPause,
     playNextTrack,
     playPreviousTrack,
+    setCurrentTime,
+    togglePlayMode,
+    playMode,
+    updateTrack,
   } = useTracks();
 
   const router = useRouter();
-
-  // Simulate playback using an interval
-  useEffect(() => {
-    let interval;
-    if (isPlaying) {
-      interval = setInterval(() => {
-        setCurrentTime((prev) => {
-          const nextTime = prev + 1;
-          if (nextTime >= playingTrack.duration / 1000) {
-            playNextTrack();
-            return 0;
-          }
-          return nextTime;
-        });
-      }, 1000);
-    } else {
-      clearInterval(interval);
-    }
-    return () => clearInterval(interval);
-  }, [isPlaying, playingTrack, currentTime]);
-
-  // Toggle play/pause
-  const togglePlayPause = () => setIsPlaying(!isPlaying);
-
-  // Toggle play mode
-  const togglePlayMode = () =>
-    setPlayMode((prevMode) => (prevMode === "order" ? "shuffle" : "order"));
 
   // Format time (milliseconds) into mm:ss
   const formatTime = (timeInMs) => {
@@ -59,7 +34,12 @@ const MusicScreen = () => {
     <View className="flex-1 p-4 mt-14">
       {/* Navigation Bar */}
       <View className="flex-row items-center justify-between py-4 px-4 shadow-sm">
-        <TouchableOpacity onPress={() => router.back()}>
+        <TouchableOpacity
+          onPress={() => {
+            if (!isPlaying) setPlayingTrack(null);
+            router.back();
+          }}
+        >
           <Ionicons name="arrow-back" size={24} color="black" />
         </TouchableOpacity>
         <Text className="text-xl font-bold">Now Playing</Text>
@@ -124,16 +104,27 @@ const MusicScreen = () => {
       {/* Playback Controls */}
       <View className="absolute bottom-0 left-0 right-0 px-4 py-6 mb-14">
         <View className="flex-row justify-between items-center px-5">
+          {/* Play Mode Button */}
           <TouchableOpacity onPress={togglePlayMode}>
             <Ionicons
-              name={playMode === "shuffle" ? "shuffle" : "repeat"}
+              name={
+                playMode === "sequential"
+                  ? "list-outline"
+                  : playMode === "shuffle"
+                  ? "shuffle-outline"
+                  : "repeat-outline"
+              }
               size={28}
               color="#757575"
             />
           </TouchableOpacity>
+
+          {/* Previous Track */}
           <TouchableOpacity onPress={playPreviousTrack}>
             <Ionicons name="play-skip-back" size={40} color="#212121" />
           </TouchableOpacity>
+
+          {/* Play/Pause Button */}
           <TouchableOpacity onPress={togglePlayPause}>
             <Ionicons
               name={isPlaying ? "pause-circle" : "play-circle"}
@@ -141,9 +132,13 @@ const MusicScreen = () => {
               color="#FF914D" // Tailwind primary color
             />
           </TouchableOpacity>
+
+          {/* Next Track */}
           <TouchableOpacity onPress={playNextTrack}>
             <Ionicons name="play-skip-forward" size={40} color="#212121" />
           </TouchableOpacity>
+
+          {/* Lyrics Button */}
           <TouchableOpacity>
             <Ionicons name="book-outline" size={28} color="#212121" />
           </TouchableOpacity>

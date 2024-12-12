@@ -1,49 +1,92 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 
 const TracksContext = createContext();
 
+export const useTracks = () => {
+  const context = useContext(TracksContext);
+  if (!context) {
+    throw new Error("useTracks must be used within a TracksProvider");
+  }
+  return context;
+};
+
 export const TracksProvider = ({ children }) => {
-  const [tracks, setTracks] = useState([]);
-  const [playingTrack, setPlayingTrack] = useState(null); // Current playing track
-  const [isPlaying, setIsPlaying] = useState(false); // Playback state
+  const [tracks, setTracks] = useState([]); // List of all tracks
+  const [playingTrack, setPlayingTrack] = useState(null); // Currently playing track
   const [currentTime, setCurrentTime] = useState(0); // Playback progress in seconds
-  const [playMode, setPlayMode] = useState("order"); // Play mode: 'order' or 'shuffle'
+  const [isPlaying, setIsPlaying] = useState(false); // Play/Pause state
+  const [playMode, setPlayMode] = useState("sequential"); // Play mode: "sequential", "shuffle", "repeat"
 
-  // Update a specific track
-  const updateTrack = (id, updatedData) => {
-    setTracks((prevTracks) =>
-      prevTracks.map((track) =>
-        track.id === id ? { ...track, ...updatedData } : track
-      )
-    );
-  };
-
-  // Play the next track
-  const playNextTrack = () => {
-    if (!playingTrack || tracks.length === 0) return;
-    const currentIndex = tracks.findIndex(
-      (track) => track.id === playingTrack.id
-    );
-    if (playMode === "shuffle") {
-      const nextIndex = Math.floor(Math.random() * tracks.length);
-      setPlayingTrack(tracks[nextIndex]);
-      setCurrentTime(0);
+  // Handle playback progress globally
+  useEffect(() => {
+    let interval;
+    if (isPlaying) {
+      interval = setInterval(() => {
+        setCurrentTime((prev) => {
+          if (playingTrack && prev >= playingTrack.duration / 1000) {
+            // Handle end of track
+            playNextTrack();
+            return 0;
+          }
+          return prev + 1;
+        });
+      }, 1000);
     } else {
-      const nextIndex = (currentIndex + 1) % tracks.length;
-      setPlayingTrack(tracks[nextIndex]);
-      setCurrentTime(0);
+      clearInterval(interval);
     }
+    return () => clearInterval(interval);
+  }, [isPlaying, playingTrack]);
+
+  const togglePlayPause = () => {
+    setIsPlaying((prev) => !prev);
   };
 
-  // Play the previous track
-  const playPreviousTrack = () => {
-    if (!playingTrack || tracks.length === 0) return;
+  const playNextTrack = () => {
     const currentIndex = tracks.findIndex(
-      (track) => track.id === playingTrack.id
+      (track) => track.id === playingTrack?.id
     );
-    const prevIndex = (currentIndex - 1 + tracks.length) % tracks.length;
-    setPlayingTrack(tracks[prevIndex]);
+    let nextTrack;
+
+    if (playMode === "repeat") {
+      setCurrentTime(0);
+      setIsPlaying(true);
+      return;
+    } else if (playMode === "shuffle") {
+      const randomIndex = Math.floor(Math.random() * tracks.length);
+      nextTrack = tracks[randomIndex];
+    } else {
+      nextTrack = tracks[(currentIndex + 1) % tracks.length];
+    }
+
+    setPlayingTrack(nextTrack);
     setCurrentTime(0);
+    setIsPlaying(true);
+  };
+
+  const playPreviousTrack = () => {
+    const currentIndex = tracks.findIndex(
+      (track) => track.id === playingTrack?.id
+    );
+    let prevTrack;
+
+    if (playMode === "shuffle") {
+      const randomIndex = Math.floor(Math.random() * tracks.length);
+      prevTrack = tracks[randomIndex];
+    } else {
+      prevTrack = tracks[(currentIndex - 1 + tracks.length) % tracks.length];
+    }
+
+    setPlayingTrack(prevTrack);
+    setCurrentTime(0);
+    setIsPlaying(true);
+  };
+
+  const togglePlayMode = () => {
+    setPlayMode((prevMode) => {
+      if (prevMode === "sequential") return "shuffle";
+      if (prevMode === "shuffle") return "repeat";
+      return "sequential";
+    });
   };
 
   return (
@@ -53,20 +96,17 @@ export const TracksProvider = ({ children }) => {
         setTracks,
         playingTrack,
         setPlayingTrack,
-        isPlaying,
-        setIsPlaying,
         currentTime,
         setCurrentTime,
-        playMode,
-        setPlayMode,
-        updateTrack,
+        isPlaying,
+        togglePlayPause,
         playNextTrack,
         playPreviousTrack,
+        playMode,
+        togglePlayMode,
       }}
     >
       {children}
     </TracksContext.Provider>
   );
 };
-
-export const useTracks = () => useContext(TracksContext);
