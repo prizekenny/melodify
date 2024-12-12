@@ -4,7 +4,6 @@ import {
   Text,
   FlatList,
   TouchableOpacity,
-  StyleSheet,
   Image,
   TextInput,
 } from "react-native";
@@ -68,44 +67,48 @@ const SearchScreen = () => {
 
   const renderSongItem = ({ item }) => (
     <TouchableOpacity
-      style={styles.songItem}
+      className="flex-row items-center border-b border-gray-300 py-2"
       onPress={() => handleSongPress(item)} // Navigate to MusicScreen
     >
-      <Image source={{ uri: item.cover }} style={styles.songImage} />
-      <Text style={styles.songName}>{item.name}</Text>
-      <Text style={styles.songArtist}>{item.artist}</Text>
+      <Image
+        source={{ uri: item.cover }}
+        className="w-12 h-12 rounded-full mr-4"
+      />
+      <View className="flex-1">
+        <Text className="text-base font-bold text-gray-800">{item.name}</Text>
+        <Text className="text-sm text-gray-500">{item.artist}</Text>
+      </View>
     </TouchableOpacity>
   );
 
   const renderCategoryItem = ({ item }) => (
     <TouchableOpacity
-      style={styles.categoryItem}
+      className="flex-1 m-2 bg-gray-100 rounded-lg shadow-md overflow-hidden"
       onPress={handleCategoryPress}
     >
-      <Image source={{ uri: item.image }} style={styles.categoryImage} />
-      <Text style={styles.categoryName}>{item.name}</Text>
+      <Image source={{ uri: item.image }} className="w-full h-32" />
+      <Text className="text-center text-sm font-bold text-gray-800 p-2">
+        {item.name}
+      </Text>
     </TouchableOpacity>
   );
 
   return (
-    <View style={styles.container}>
-      <View style={styles.searchBarSection}>
-        <View style={styles.searchBarContainer}>
-          <Ionicons
-            name="search"
-            size={20}
-            color="#aaa"
-            style={styles.searchIcon}
-          />
+    <View className="flex-1 px-5 mt-14">
+      <View className="my-3">
+        <View className="flex-row items-center bg-gray-100 border-2 border-orange-500 rounded-full px-4 h-12">
+          <Ionicons name="search" size={20} color="#aaa" className="mr-2" />
           <TextInput
-            style={styles.searchBarInput}
+            className="flex-1 text-base text-gray-800 bg-transparent"
             placeholder="Search songs or artists..."
             placeholderTextColor="#aaa"
             value={searchQuery}
             onChangeText={handleSearch}
           />
-          <TouchableOpacity onPress={handleCancel} style={styles.cancelButton}>
-            <Text style={styles.cancelButtonText}>Cancel</Text>
+          <TouchableOpacity onPress={handleCancel}>
+            <Text className="text-orange-500 text-base font-bold ml-2">
+              Cancel
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -130,11 +133,11 @@ const SearchScreen = () => {
         numColumns={
           displaySongs.length > 0 && displaySongs !== "noresults" ? 1 : 2
         }
-        contentContainerStyle={styles.displayContainer}
+        contentContainerStyle="pb-20"
         ListEmptyComponent={
           displaySongs === "noresults" && (
-            <View style={styles.noResultsContainer}>
-              <Text style={styles.noResultsText}>
+            <View className="flex-1 justify-center items-center mt-5">
+              <Text className="text-lg text-gray-500">
                 Sorry, there are no relevant results...
               </Text>
             </View>
@@ -144,101 +147,5 @@ const SearchScreen = () => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    padding: 20,
-  },
-  searchBarSection: {
-    marginTop: 30,
-    marginBottom: 20,
-  },
-  searchBarContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#f9f9f9",
-    borderWidth: 2,
-    borderColor: "#f05a28",
-    borderRadius: 25,
-    paddingHorizontal: 15,
-    height: 50,
-  },
-  searchIcon: {
-    marginRight: 10,
-  },
-  searchBarInput: {
-    flex: 1,
-    fontSize: 16,
-    color: "#333",
-    backgroundColor: "transparent",
-  },
-  cancelButton: {
-    marginLeft: 10,
-    justifyContent: "center",
-  },
-  cancelButtonText: {
-    color: "#f05a28",
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-  categoryItem: {
-    flex: 1,
-    margin: 10,
-    borderRadius: 15,
-    overflow: "hidden",
-    backgroundColor: "#f5f5f5",
-    elevation: 3,
-  },
-  categoryImage: {
-    width: "100%",
-    height: 120,
-    resizeMode: "cover",
-  },
-  categoryName: {
-    fontSize: 14,
-    fontWeight: "bold",
-    color: "#333",
-    textAlign: "center",
-    padding: 10,
-  },
-  songItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    borderBottomWidth: 1,
-    borderBottomColor: "#ccc",
-    paddingVertical: 10,
-  },
-  songImage: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    marginRight: 10,
-  },
-  songName: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#333",
-    flex: 1,
-  },
-  songArtist: {
-    fontSize: 14,
-    color: "#666",
-  },
-  displayContainer: {
-    paddingBottom: 20,
-  },
-  noResultsContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 20,
-  },
-  noResultsText: {
-    fontSize: 18,
-    color: "#888",
-  },
-});
 
 export default SearchScreen;

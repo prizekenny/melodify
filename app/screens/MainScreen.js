@@ -49,7 +49,7 @@ const MainScreen = () => {
   };
 
   return (
-    <View className="bg-background flex-1 flex-col px-5">
+    <View className="bg-background flex-1 flex-col px-5 mt-12">
       {/* Header */}
       <View className="items-center">
         <Logo imageSize={80} fontSize={30} />
@@ -120,7 +120,7 @@ const MainScreen = () => {
       </View>
 
       {/* Now Playing */}
-      <View className="pr-24">
+      <View className="">
         <NowPlaying />
       </View>
     </View>
