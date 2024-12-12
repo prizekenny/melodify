@@ -18,6 +18,8 @@ const MusicScreen = () => {
     togglePlayMode,
     playMode,
     updateTrack,
+    isTrackInCollection,
+    toggleTrackInCollection,
   } = useTracks();
 
   const router = useRouter();
@@ -28,6 +30,17 @@ const MusicScreen = () => {
     const minutes = Math.floor(totalSeconds / 60);
     const seconds = totalSeconds % 60;
     return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+  };
+
+  const handleToggleFavorite = async (id) => {
+    if (!isTrackInCollection(playingTrack)) {
+      return;
+    }
+    if (playingTrack) {
+      const newTrack = { ...playingTrack, favorite: !playingTrack.favorite };
+      updateTrack(id, newTrack);
+      setPlayingTrack(newTrack);
+    }
   };
 
   return (
@@ -67,17 +80,30 @@ const MusicScreen = () => {
           </Text>
           <Text className="text-textSecondary">{playingTrack.artist}</Text>
         </View>
-        <TouchableOpacity
-          onPress={() =>
-            updateTrack(playingTrack.id, { favorite: !playingTrack.favorite })
-          }
-        >
-          <Ionicons
-            name={playingTrack.favorite ? "heart" : "heart-outline"}
-            size={28}
-            color={playingTrack.favorite ? "#E53935" : "gray"}
-          />
-        </TouchableOpacity>
+        {/* Icons Container */}
+        <View className="flex-row items-center space-x-3 gap-5">
+          <TouchableOpacity
+            onPress={() => {
+              handleToggleFavorite(playingTrack.id);
+            }}
+          >
+            <Ionicons
+              name={playingTrack.favorite ? "heart" : "heart-outline"}
+              size={28}
+              color={playingTrack.favorite ? "#E53935" : "gray"}
+            />
+          </TouchableOpacity>
+          {/* Star Icon */}
+          <TouchableOpacity
+            onPress={() => toggleTrackInCollection(playingTrack)}
+          >
+            <Ionicons
+              name={isTrackInCollection(playingTrack) ? "star" : "star-outline"}
+              size={28}
+              color={isTrackInCollection(playingTrack) ? "#FF914D" : "gray"}
+            />
+          </TouchableOpacity>
+        </View>
       </View>
 
       {/* Progress Bar */}
