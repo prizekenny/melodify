@@ -50,6 +50,24 @@ export default function Layout() {
           ),
         }}
       />
+      <Tabs.Screen
+        name="screens/MusicScreen"
+        options={{
+          title: "Music",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="musical-notes-outline" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="screens/LyricsScreen"
+        options={{
+          title: "Lyrics",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="document-text-outline" color={color} size={size} />
+          ),
+        }}
+      />
     </Tabs>
   );
 }

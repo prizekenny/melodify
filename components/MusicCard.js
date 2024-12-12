@@ -1,21 +1,13 @@
 import { View, Text, Image } from "react-native";
 import React from "react";
-import { Ionicons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
 
-const MusicCard = ({ imgURL, songName, artistName, artistId }) => {
-  const navigation = useNavigation();
-
-  const handleArtistPress = () => {
-    navigation.navigate("artist", { artistId });
-  };
-
+const MusicCard = ({ cover, name, artist, onPlay }) => {
   return (
     <View className="flex-1 w-36 flex-column rounded-lg">
       {/* Image and play button */}
       <View className="w-36 h-36">
         <Image
-          source={{ uri: imgURL || "https://via.placeholder.com/150" }}
+          source={{ uri: cover || "https://via.placeholder.com/150" }}
           className="w-full h-full rounded-3xl"
         />
         {/* Play button，only display when handlePlay function is not null */}
@@ -36,13 +28,15 @@ const MusicCard = ({ imgURL, songName, artistName, artistId }) => {
           numberOfLines={1} // Limit to single line
           ellipsizeMode="tail" // Display as ... when exceeding
         >
-          {songName}
+          {name}
         </Text>
-        <TouchableOpacity onPress={handleArtistPress}>
-          <Text className="text-sm text-gray-600" numberOfLines={1}>
-            {artistName}
-          </Text>
-        </TouchableOpacity>
+        <Text
+          className="text-sm text-gray-600"
+          numberOfLines={1} // Limit to single line
+          ellipsizeMode="tail" // Display as ... when exceeding
+        >
+          {artist}
+        </Text>
       </View>
     </View>
   );
