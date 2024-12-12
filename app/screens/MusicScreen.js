@@ -1,35 +1,19 @@
 import React from "react";
 import { View, Text, TouchableOpacity, Image } from "react-native";
 
-import { useTracks } from "../context/TrackProvider";
-
-const MusicScreen = () => {
-  const { playingTrack } = useTracks();
-
-  if (!playingTrack) {
-    return (
-      <View className="flex-1 bg-background items-center justify-center">
-        <Text className="text-textPrimary text-lg">Track not found</Text>
-      </View>
-    );
-  }
+const MusicScreen = ({ route, navigation }) => {
+  const { song } = route.params;
 
   return (
     <View className="flex-1 bg-background p-4">
       {/* Album Cover and Song Info */}
       <View className="items-center">
         <Image
-          source={
-            playingTrack.cover
-              ? { uri: playingTrack.cover }
-              : require("../../assets/images/default-cover.png")
-          }
+          source={{ uri: song.cover }}
           className="w-40 h-40 mb-4 rounded"
         />
-        <Text className="text-textPrimary text-xl font-bold">
-          {playingTrack.title}
-        </Text>
-        <Text className="text-textSecondary">{playingTrack.artist}</Text>
+        <Text className="text-textPrimary text-xl font-bold">{song.name}</Text>
+        <Text className="text-textSecondary">{song.artist}</Text>
       </View>
 
       {/* Music Controls */}
@@ -46,7 +30,10 @@ const MusicScreen = () => {
       </View>
 
       {/* View Lyrics Button */}
-      <TouchableOpacity className="mt-8 bg-secondary p-4 rounded">
+      <TouchableOpacity
+        onPress={() => navigation.navigate("LyricsScreen", { song })}
+        className="mt-8 bg-secondary p-4 rounded"
+      >
         <Text className="text-white text-center">View Lyrics</Text>
       </TouchableOpacity>
     </View>
