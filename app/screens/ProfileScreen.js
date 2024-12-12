@@ -1,6 +1,12 @@
-import { NativeWindStyleSheet } from "nativewind";
 import React from "react";
-import { View, Text, Image, FlatList, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  FlatList,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
 
 const ProfileScreen = () => {
   const playlists = [
@@ -9,29 +15,48 @@ const ProfileScreen = () => {
       title: "Dont Smile At Me",
       artist: "Billie Eilish",
       duration: "5:33",
-      cover: "https://example.com/cover1.jpg",
+      cover: require("../../assets/images/profile_image1.png"),
     },
     {
       id: "2",
       title: "As It Was",
       artist: "Harry Styles",
       duration: "5:33",
-      cover: "https://example.com/cover2.jpg",
+      cover: require("../../assets/images/profile_image2.png"),
     },
     {
       id: "3",
       title: "Super Freaky Girl",
       artist: "Nicki Minaj",
       duration: "5:33",
-      cover: "https://example.com/cover3.jpg",
+      cover: require("../../assets/images/profile_image3.png"),
+    },
+    {
+      id: "4",
+      title: "Bad Habit",
+      artist: "Steve Lacy",
+      duration: "5:33",
+      cover: require("../../assets/images/profile_image4.png"),
+    },
+    {
+      id: "5",
+      title: "Planet Her",
+      artist: "Doja Cat",
+      duration: "5:33",
+      cover: require("../../assets/images/profile_image5.png"),
+    },
+    {
+      id: "6",
+      title: "Sweetest Pie",
+      artist: "Megan Thee Stallion",
+      duration: "5:33",
+      cover: require("../../assets/images/profile_image6.png"),
     },
   ];
 
-  // Without this line, only one tag in className will be output
-  //NativeWindStyleSheet.setOutput({ default: "native" });
-
   return (
-    <View className="flex-1 bg-background">
+    <ScrollView className="flex-1 bg-background">
+      {/* Header Section */}
       <View className="flex-row justify-between items-center p-4">
         <TouchableOpacity>
           <Text>{"<"}</Text>
@@ -42,15 +67,14 @@ const ProfileScreen = () => {
         </TouchableOpacity>
       </View>
 
+      {/* User Info Section */}
       <View className="items-center p-4">
         <Image
-          source={{
-            uri: "https://example.com/profile-avatar.jpg",
-          }}
+          source={require("../../assets/images/profile_image1.png")}
           className="w-24 h-24 rounded-full mb-4"
         />
         <Text className="text-textSecondary">soroushnorozynui@gmail.com</Text>
-        <Text className="text-textPrimary text-xl font-bold">Sorouhsnrz</Text>
+        <Text className="text-textPrimary text-xl font-bold">Soroushnrz</Text>
         <View className="flex-row justify-between w-3/4 mt-4">
           <View className="items-center">
             <Text className="text-textPrimary font-bold">778</Text>
@@ -63,6 +87,7 @@ const ProfileScreen = () => {
         </View>
       </View>
 
+      {/* Public Playlists Section */}
       <View className="p-4">
         <Text className="text-textPrimary text-lg font-bold mb-4">
           Public Playlists
@@ -72,10 +97,7 @@ const ProfileScreen = () => {
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
             <View className="flex-row justify-between items-center mb-4">
-              <Image
-                source={{ uri: item.cover }}
-                className="w-16 h-16 rounded"
-              />
+              <Image source={item.cover} className="w-16 h-16 rounded" />
               <View className="flex-1 mx-4">
                 <Text className="text-textPrimary font-bold">{item.title}</Text>
                 <Text className="text-textSecondary">{item.artist}</Text>
@@ -88,7 +110,7 @@ const ProfileScreen = () => {
           )}
         />
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
