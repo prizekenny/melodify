@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -6,64 +6,49 @@ import {
   FlatList,
   ScrollView,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
+import axios from "axios";
 
 const ProfileScreen = ({ navigation }) => {
-  const playlists = [
-    {
-      id: "1",
-      title: "Dont Smile At Me",
-      artist: "Billie Eilish",
-      duration: "5:33",
-      cover: require("../../assets/images/profile_image1.png"),
-    },
-    {
-      id: "2",
-      title: "As It Was",
-      artist: "Harry Styles",
-      duration: "5:33",
-      cover: require("../../assets/images/profile_image2.png"),
-    },
-    {
-      id: "3",
-      title: "Super Freaky Girl",
-      artist: "Nicki Minaj",
-      duration: "5:33",
-      cover: require("../../assets/images/profile_image3.png"),
-    },
-    {
-      id: "4",
-      title: "Bad Habit",
-      artist: "Steve Lacy",
-      duration: "5:33",
-      cover: require("../../assets/images/profile_image4.png"),
-    },
-    {
-      id: "5",
-      title: "Planet Her",
-      artist: "Doja Cat",
-      duration: "5:33",
-      cover: require("../../assets/images/profile_image5.png"),
-    },
-    {
-      id: "6",
-      title: "Sweetest Pie",
-      artist: "Megan Thee Stallion",
-      duration: "5:33",
-      cover: require("../../assets/images/profile_image6.png"),
-    },
-  ];
+  const [playlists, setPlaylists] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchPlaylists = async () => {
+      try {
+        const response = await axios.get(
+          "https://674fe249bb559617b2705ea9.mockapi.io/tracks"
+        );
+        setPlaylists(response.data.slice(0, 10)); // Show only the first 10 tracks
+      } catch (error) {
+        console.error("Error fetching playlists:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPlaylists();
+  }, []);
 
   const handlePlay = (item) => {
     navigation.navigate("MusicScreen", { song: item });
   };
+
+  if (loading) {
+    return (
+      <View className="flex-1 justify-center items-center bg-background">
+        <ActivityIndicator size="large" color="#FF914D" />
+      </View>
+    );
+  }
 
   return (
     <ScrollView className="flex-1 bg-background">
       {/* Top Section */}
       <View className="bg-white rounded-b-3xl shadow-md p-6 items-center">
         <Image
-          source={require("../../assets/images/profile_image1.png")}
+          source={{ uri: "https://picsum.photos/200?random=1001" }}
           className="w-24 h-24 rounded-full mb-4"
         />
         <Text className="text-textSecondary">soroushnorozynui@gmail.com</Text>
@@ -93,12 +78,17 @@ const ProfileScreen = ({ navigation }) => {
               onPress={() => handlePlay(item)}
               className="flex-row items-center mb-4"
             >
-              <Image source={item.cover} className="w-16 h-16 rounded" />
+              <Image
+                source={{ uri: item.cover }}
+                className="w-16 h-16 rounded"
+              />
               <View className="flex-1 mx-4">
-                <Text className="text-textPrimary font-bold">{item.title}</Text>
+                <Text className="text-textPrimary font-bold">{item.name}</Text>
                 <Text className="text-textSecondary">{item.artist}</Text>
               </View>
-              <Text className="text-textSecondary">{item.duration}</Text>
+              <Text className="text-textSecondary">
+                {(item.duration / 1000 / 60).toFixed(2)} mins
+              </Text>
             </TouchableOpacity>
           )}
         />

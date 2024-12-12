@@ -2,26 +2,17 @@ import React from "react";
 import { View, Text, TouchableOpacity, Image } from "react-native";
 
 const MusicScreen = ({ route, navigation }) => {
-  // Receive song data from navigation route
-  const { song } = route.params || {
-    title: "Default Song",
-    artist: "Default Artist",
-    cover: "https://example.com/album-cover.jpg",
-  };
+  const { song } = route.params;
 
   return (
     <View className="flex-1 bg-background p-4">
       {/* Album Cover and Song Info */}
       <View className="items-center">
         <Image
-          source={
-            song.cover
-              ? { uri: song.cover }
-              : require("../../assets/images/default-cover.png")
-          }
+          source={{ uri: song.cover }}
           className="w-40 h-40 mb-4 rounded"
         />
-        <Text className="text-textPrimary text-xl font-bold">{song.title}</Text>
+        <Text className="text-textPrimary text-xl font-bold">{song.name}</Text>
         <Text className="text-textSecondary">{song.artist}</Text>
       </View>
 
