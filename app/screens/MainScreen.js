@@ -1,219 +1,62 @@
 import { View, Text, ScrollView } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import NewAlbum from "../../components/NewAlbum";
 import MusicCard from "../../components/MusicCard";
 import Logo from "../../components/Logo";
 import PlaylistItem from "../../components/PlayListItem";
+import { useRouter } from "expo-router";
+import { getNewAlbums, getTracks, updateTrack } from "../api/music";
 
 const MainScreen = () => {
-  const album = {
-    name: "Happier Than Ever",
-    artist: "Billie Eilish",
-    photo: "https://picsum.photos/200?random=1",
+  const [newAlbums, setNewAlbums] = useState([]);
+  const [tracks, setTracks] = useState([]);
+  useEffect(() => {
+    // fetch new albums
+    const fetchNewAlbums = async () => {
+      try {
+        const albums = await getNewAlbums();
+        setNewAlbums(albums);
+      } catch (error) {
+        console.error("Error fetching albums:", error);
+      }
+    };
+    const fetchTracks = async () => {
+      try {
+        const tracks = await getTracks();
+        setTracks(tracks);
+        console.log("tracks", tracks);
+      } catch (error) {
+        console.error("Error fetching tracks:", error);
+      }
+    };
+
+    fetchNewAlbums();
+    fetchTracks();
+  }, []);
+
+  const router = useRouter();
+  const handlePlay = (track) => {
+    router.push({
+      pathname: "/music",
+      params: track,
+    });
   };
-  const musics = [
-    {
-      image: "https://picsum.photos/200?random=2",
-      name: "Blinding Lights",
-      artist: "The Weeknd",
-    },
-    {
-      image: "https://picsum.photos/200?random=3",
-      name: "Shape of You",
-      artist: "Ed Sheeran",
-    },
-    {
-      image: "https://picsum.photos/200?random=4",
-      name: "Levitating",
-      artist: "Dua Lipa",
-    },
-    {
-      image: "https://picsum.photos/200?random=5",
-      name: "Bad Guy",
-      artist: "Billie Eilish",
-    },
-    {
-      image: "https://picsum.photos/200?random=6",
-      name: "Uptown Funk",
-      artist: "Mark Ronson ft. Bruno Mars",
-    },
-    {
-      image: "https://picsum.photos/200?random=7",
-      name: "Rolling in the Deep",
-      artist: "Adele",
-    },
-    {
-      image: "https://picsum.photos/200?random=8",
-      name: "Shallow",
-      artist: "Lady Gaga & Bradley Cooper",
-    },
-    {
-      image: "https://picsum.photos/200?random=9",
-      name: "Someone Like You",
-      artist: "Adele",
-    },
-    {
-      image: "https://picsum.photos/200?random=10",
-      name: "Havana",
-      artist: "Camila Cabello",
-    },
-    {
-      image: "https://picsum.photos/200?random=11",
-      name: "Senorita",
-      artist: "Shawn Mendes & Camila Cabello",
-    },
-  ];
-  const initialPlaylist = [
-    {
-      id: 1,
-      name: "Blinding Lights",
-      artist: "The Weeknd",
-      duration: "3:20",
-      isFavorite: true,
-    },
-    {
-      id: 2,
-      name: "Shape of You",
-      artist: "Ed Sheeran",
-      duration: "4:24",
-      isFavorite: false,
-    },
-    {
-      id: 3,
-      name: "Levitating",
-      artist: "Dua Lipa",
-      duration: "3:23",
-      isFavorite: true,
-    },
-    {
-      id: 4,
-      name: "Rolling in the Deep",
-      artist: "Adele",
-      duration: "3:48",
-      isFavorite: false,
-    },
-    {
-      id: 5,
-      name: "Bad Guy",
-      artist: "Billie Eilish",
-      duration: "3:15",
-      isFavorite: false,
-    },
-    {
-      id: 6,
-      name: "Uptown Funk",
-      artist: "Mark Ronson ft. Bruno Mars",
-      duration: "4:30",
-      isFavorite: true,
-    },
-    {
-      id: 7,
-      name: "Shallow",
-      artist: "Lady Gaga & Bradley Cooper",
-      duration: "3:37",
-      isFavorite: false,
-    },
-    {
-      id: 8,
-      name: "Someone Like You",
-      artist: "Adele",
-      duration: "4:45",
-      isFavorite: true,
-    },
-    {
-      id: 9,
-      name: "Havana",
-      artist: "Camila Cabello",
-      duration: "3:36",
-      isFavorite: false,
-    },
-    {
-      id: 10,
-      name: "Senorita",
-      artist: "Shawn Mendes & Camila Cabello",
-      duration: "3:11",
-      isFavorite: true,
-    },
-    {
-      id: 11,
-      name: "All of Me",
-      artist: "John Legend",
-      duration: "4:29",
-      isFavorite: false,
-    },
-    {
-      id: 12,
-      name: "Thinking Out Loud",
-      artist: "Ed Sheeran",
-      duration: "4:41",
-      isFavorite: true,
-    },
-    {
-      id: 13,
-      name: "Sorry",
-      artist: "Justin Bieber",
-      duration: "3:20",
-      isFavorite: false,
-    },
-    {
-      id: 14,
-      name: "Stay",
-      artist: "The Kid LAROI & Justin Bieber",
-      duration: "2:21",
-      isFavorite: true,
-    },
-    {
-      id: 15,
-      name: "Old Town Road",
-      artist: "Lil Nas X ft. Billy Ray Cyrus",
-      duration: "2:38",
-      isFavorite: false,
-    },
-    {
-      id: 16,
-      name: "Dance Monkey",
-      artist: "Tones and I",
-      duration: "3:29",
-      isFavorite: true,
-    },
-    {
-      id: 17,
-      name: "Perfect",
-      artist: "Ed Sheeran",
-      duration: "4:23",
-      isFavorite: false,
-    },
-    {
-      id: 18,
-      name: "Hello",
-      artist: "Adele",
-      duration: "4:55",
-      isFavorite: true,
-    },
-    {
-      id: 19,
-      name: "Rockstar",
-      artist: "Post Malone ft. 21 Savage",
-      duration: "3:38",
-      isFavorite: false,
-    },
-    {
-      id: 20,
-      name: "Closer",
-      artist: "The Chainsmokers ft. Halsey",
-      duration: "4:04",
-      isFavorite: true,
-    },
-  ];
-
-  const [playlist, setPlaylist] = useState(initialPlaylist);
-
-  const handlePlay = () => {};
-  const handleToggleFavorite = (id) => {
-    const newPlaylist = playlist.map((item) =>
-      item.id === id ? { ...item, isFavorite: !item.isFavorite } : item
+  const handleToggleFavorite = async (id) => {
+    const newTracks = tracks.map((item) =>
+      item.id === id ? { ...item, favorite: !item.favorite } : item
     );
-    setPlaylist(newPlaylist);
+    setTracks(newTracks);
+
+    const updatedTrack = tracks.find((item) => item.id === id);
+    try {
+      const data = await updateTrack(id, {
+        ...updatedTrack,
+        favorite: !updatedTrack.favorite,
+      });
+      return data;
+    } catch (error) {
+      console.error("Error updating track:", error);
+    }
   };
 
   return (
@@ -224,14 +67,17 @@ const MainScreen = () => {
       </View>
 
       {/* New Album */}
-      <View className="flex-col mb-5">
-        {/* <Text className="text-black mb-5 text-2xl">New Album</Text> */}
-        <NewAlbum
-          albumName={album.name}
-          artistName={album.artist}
-          artistPhoto={album.photo}
-        />
-      </View>
+      {newAlbums.length == 0 && <Text>Loading...</Text>}
+      {newAlbums.length > 0 && (
+        <View className="flex-col mb-5">
+          {/* <Text className="text-black mb-5 text-2xl">New Album</Text> */}
+          <NewAlbum
+            album={newAlbums[0].name}
+            artist={newAlbums[0].artist}
+            cover={newAlbums[0].cover}
+          />
+        </View>
+      )}
 
       {/* News */}
       <View className="flex-col mb-5 h-60">
@@ -243,13 +89,14 @@ const MainScreen = () => {
           nestedScrollEnabled={true}
           className="gap-2"
         >
-          {musics.map((music, index) => (
+          {tracks.length == 0 && <Text>Loading...</Text>}
+          {tracks.map((track, index) => (
             /* must use View to wrap PlaylistItem, otherwise the parent gap does not work */
             <View key={index}>
               <MusicCard
-                imgURL={music.image}
-                songName={music.name}
-                artistName={music.artist}
+                cover={track.cover}
+                name={track.name}
+                artist={track.artist}
               />
             </View>
           ))}
@@ -265,17 +112,18 @@ const MainScreen = () => {
           nestedScrollEnabled={true}
           className="gap-2"
         >
-          {playlist.map((item, index) => (
+          {tracks.length == 0 && <Text>Loading...</Text>}
+          {tracks.map((track, index) => (
             /* must use View to wrap PlaylistItem, otherwise the parent gap does not work */
-            <View key={item.id}>
+            <View key={index}>
               <PlaylistItem
-                id={item.id}
-                songName={item.name}
-                artistName={item.artist}
-                duration={item.duration}
-                isFavorite={item.isFavorite}
-                onPlay={handlePlay}
-                onToggleFavorite={() => handleToggleFavorite(item.id)}
+                id={track.id}
+                name={track.name}
+                artist={track.artist}
+                duration={track.duration}
+                favorite={track.favorite}
+                onPlay={() => handlePlay(track)}
+                onToggleFavorite={() => handleToggleFavorite(track.id)}
               />
             </View>
           ))}

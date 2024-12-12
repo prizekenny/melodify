@@ -4,10 +4,10 @@ import { Ionicons } from "@expo/vector-icons";
 
 const PlaylistItem = ({
   id,
-  songName,
-  artistName,
+  name,
+  artist,
   duration,
-  isFavorite,
+  favorite,
   onPlay,
   onToggleFavorite,
 }) => {
@@ -21,25 +21,27 @@ const PlaylistItem = ({
       {/* Song information */}
       <View className="flex-1 ml-3">
         <Text className="text-base font-bold text-gray-900" numberOfLines={1}>
-          {songName}
+          {name}
         </Text>
         <Text className="text-sm text-gray-600" numberOfLines={1}>
-          {artistName}
+          {artist}
         </Text>
       </View>
 
       {/* Song time and fav button */}
       <View className="flex-row items-center">
-        <Text className="text-sm text-gray-600 mr-3">{duration}</Text>
+        <Text className="text-sm text-gray-600 mr-3">
+          {formatDuration(duration)}
+        </Text>
         <TouchableOpacity
           onPress={() => {
             onToggleFavorite(id);
           }}
         >
           <Ionicons
-            name={isFavorite ? "heart" : "heart-outline"}
+            name={favorite ? "heart" : "heart-outline"}
             size={20}
-            color={isFavorite ? "red" : "gray"}
+            color={favorite ? "red" : "gray"}
           />
         </TouchableOpacity>
       </View>
@@ -48,3 +50,27 @@ const PlaylistItem = ({
 };
 
 export default PlaylistItem;
+
+function formatDuration(milliseconds) {
+  // Convert milliseconds to total seconds
+  const totalSeconds = Math.floor(milliseconds / 1000);
+
+  // Calculate hours, minutes, and remaining seconds
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+
+  // If hours is 0, return mm:ss format
+  if (hours === 0) {
+    return `${minutes.toString().padStart(2, "0")}:${seconds
+      .toString()
+      .padStart(2, "0")}`;
+  }
+
+  // Otherwise, return full hh:mm:ss format
+  const paddedHours = hours.toString().padStart(2, "0");
+  const paddedMinutes = minutes.toString().padStart(2, "0");
+  const paddedSeconds = seconds.toString().padStart(2, "0");
+
+  return `${paddedHours}:${paddedMinutes}:${paddedSeconds}`;
+}

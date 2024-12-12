@@ -1,3 +1,4 @@
+import { NativeWindStyleSheet } from "nativewind";
 import React from "react";
 import { View, Text, Image, FlatList, TouchableOpacity } from "react-native";
 
@@ -25,6 +26,9 @@ const ProfileScreen = () => {
       cover: "https://example.com/cover3.jpg",
     },
   ];
+
+  // Without this line, only one tag in className will be output
+  //NativeWindStyleSheet.setOutput({ default: "native" });
 
   return (
     <View className="flex-1 bg-background">

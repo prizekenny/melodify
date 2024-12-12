@@ -1,6 +1,9 @@
 import { Stack } from "expo-router";
+import { NativeWindStyleSheet } from "nativewind";
 
 export default function Layout() {
+  // Without this line, only one tag in className will be output
+  NativeWindStyleSheet.setOutput({ default: "native" });
   return (
     <Stack
       initialRouteName="screens/LoadingScreen"
