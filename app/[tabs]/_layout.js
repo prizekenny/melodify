@@ -50,22 +50,18 @@ export default function Layout() {
           ),
         }}
       />
+      {/* Hide MusicScreen from Tab Bar */}
       <Tabs.Screen
         name="screens/MusicScreen"
         options={{
-          title: "Music",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="musical-notes-outline" color={color} size={size} />
-          ),
+          tabBarButton: () => null, // Hides this screen from Tab Bar
         }}
       />
+      {/* Hide LyricsScreen from Tab Bar */}
       <Tabs.Screen
         name="screens/LyricsScreen"
         options={{
-          title: "Lyrics",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="document-text-outline" color={color} size={size} />
-          ),
+          tabBarButton: () => null, // Hides this screen from Tab Bar
         }}
       />
     </Tabs>

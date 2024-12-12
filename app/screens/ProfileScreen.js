@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 
-const ProfileScreen = () => {
+const ProfileScreen = ({ navigation }) => {
   const playlists = [
     {
       id: "1",
@@ -54,28 +54,21 @@ const ProfileScreen = () => {
     },
   ];
 
+  const handlePlay = (item) => {
+    navigation.navigate("MusicScreen", { song: item });
+  };
+
   return (
     <ScrollView className="flex-1 bg-background">
-      {/* Header Section */}
-      <View className="flex-row justify-between items-center p-4">
-        <TouchableOpacity>
-          <Text>{"<"}</Text>
-        </TouchableOpacity>
-        <Text className="text-textPrimary text-lg font-bold">Profile</Text>
-        <TouchableOpacity>
-          <Text>⋮</Text>
-        </TouchableOpacity>
-      </View>
-
-      {/* User Info Section */}
-      <View className="items-center p-4">
+      {/* Top Section */}
+      <View className="bg-white rounded-b-3xl shadow-md p-6 items-center">
         <Image
           source={require("../../assets/images/profile_image1.png")}
           className="w-24 h-24 rounded-full mb-4"
         />
         <Text className="text-textSecondary">soroushnorozynui@gmail.com</Text>
         <Text className="text-textPrimary text-xl font-bold">Soroushnrz</Text>
-        <View className="flex-row justify-between w-3/4 mt-4">
+        <View className="flex-row justify-around w-full mt-4">
           <View className="items-center">
             <Text className="text-textPrimary font-bold">778</Text>
             <Text className="text-textSecondary">Followers</Text>
@@ -96,17 +89,17 @@ const ProfileScreen = () => {
           data={playlists}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
-            <View className="flex-row justify-between items-center mb-4">
+            <TouchableOpacity
+              onPress={() => handlePlay(item)}
+              className="flex-row items-center mb-4"
+            >
               <Image source={item.cover} className="w-16 h-16 rounded" />
               <View className="flex-1 mx-4">
                 <Text className="text-textPrimary font-bold">{item.title}</Text>
                 <Text className="text-textSecondary">{item.artist}</Text>
               </View>
               <Text className="text-textSecondary">{item.duration}</Text>
-              <TouchableOpacity>
-                <Text>⋮</Text>
-              </TouchableOpacity>
-            </View>
+            </TouchableOpacity>
           )}
         />
       </View>
