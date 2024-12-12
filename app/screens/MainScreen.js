@@ -4,6 +4,7 @@ import NewAlbum from "../../components/NewAlbum";
 import MusicCard from "../../components/MusicCard";
 import Logo from "../../components/Logo";
 import PlaylistItem from "../../components/PlayListItem";
+import { usePlaylist } from "../../hooks/usePlaylist";
 
 const MainScreen = () => {
   const album = {
@@ -16,56 +17,67 @@ const MainScreen = () => {
       image: "https://picsum.photos/200?random=2",
       name: "Blinding Lights",
       artist: "The Weeknd",
+      artistId: "artist_1",
     },
     {
       image: "https://picsum.photos/200?random=3",
       name: "Shape of You",
       artist: "Ed Sheeran",
+      artistId: "artist_2",
     },
     {
       image: "https://picsum.photos/200?random=4",
       name: "Levitating",
       artist: "Dua Lipa",
+      artistId: "artist_3",
     },
     {
       image: "https://picsum.photos/200?random=5",
       name: "Bad Guy",
       artist: "Billie Eilish",
+      artistId: "artist_5",
     },
     {
       image: "https://picsum.photos/200?random=6",
       name: "Uptown Funk",
       artist: "Mark Ronson ft. Bruno Mars",
+      artistId: "artist_6",
     },
     {
       image: "https://picsum.photos/200?random=7",
       name: "Rolling in the Deep",
       artist: "Adele",
+      artistId: "artist_4",
     },
     {
       image: "https://picsum.photos/200?random=8",
       name: "Shallow",
       artist: "Lady Gaga & Bradley Cooper",
+      artistId: "artist_7",
     },
     {
       image: "https://picsum.photos/200?random=9",
       name: "Someone Like You",
       artist: "Adele",
+      artistId: "artist_4",
     },
     {
       image: "https://picsum.photos/200?random=10",
       name: "Havana",
       artist: "Camila Cabello",
+      artistId: "artist_8",
     },
     {
       image: "https://picsum.photos/200?random=11",
       name: "Senorita",
       artist: "Shawn Mendes & Camila Cabello",
+      artistId: "artist_8",
     },
   ];
   const initialPlaylist = [
     {
       id: 1,
+      artistId: "artist_1",
       name: "Blinding Lights",
       artist: "The Weeknd",
       duration: "3:20",
@@ -73,6 +85,7 @@ const MainScreen = () => {
     },
     {
       id: 2,
+      artistId: "artist_2",
       name: "Shape of You",
       artist: "Ed Sheeran",
       duration: "4:24",
@@ -80,6 +93,7 @@ const MainScreen = () => {
     },
     {
       id: 3,
+      artistId: "artist_3",
       name: "Levitating",
       artist: "Dua Lipa",
       duration: "3:23",
@@ -87,6 +101,7 @@ const MainScreen = () => {
     },
     {
       id: 4,
+      artistId: "artist_4",
       name: "Rolling in the Deep",
       artist: "Adele",
       duration: "3:48",
@@ -94,6 +109,7 @@ const MainScreen = () => {
     },
     {
       id: 5,
+      artistId: "artist_5",
       name: "Bad Guy",
       artist: "Billie Eilish",
       duration: "3:15",
@@ -101,6 +117,7 @@ const MainScreen = () => {
     },
     {
       id: 6,
+      artistId: "artist_6",
       name: "Uptown Funk",
       artist: "Mark Ronson ft. Bruno Mars",
       duration: "4:30",
@@ -108,6 +125,7 @@ const MainScreen = () => {
     },
     {
       id: 7,
+      artistId: "artist_7",
       name: "Shallow",
       artist: "Lady Gaga & Bradley Cooper",
       duration: "3:37",
@@ -115,6 +133,7 @@ const MainScreen = () => {
     },
     {
       id: 8,
+      artistId: "artist_4",
       name: "Someone Like You",
       artist: "Adele",
       duration: "4:45",
@@ -122,6 +141,7 @@ const MainScreen = () => {
     },
     {
       id: 9,
+      artistId: "artist_8",
       name: "Havana",
       artist: "Camila Cabello",
       duration: "3:36",
@@ -129,6 +149,7 @@ const MainScreen = () => {
     },
     {
       id: 10,
+      artistId: "artist_8",
       name: "Senorita",
       artist: "Shawn Mendes & Camila Cabello",
       duration: "3:11",
@@ -136,6 +157,7 @@ const MainScreen = () => {
     },
     {
       id: 11,
+      artistId: "artist_9",
       name: "All of Me",
       artist: "John Legend",
       duration: "4:29",
@@ -143,6 +165,7 @@ const MainScreen = () => {
     },
     {
       id: 12,
+      artistId: "artist_2",
       name: "Thinking Out Loud",
       artist: "Ed Sheeran",
       duration: "4:41",
@@ -150,6 +173,7 @@ const MainScreen = () => {
     },
     {
       id: 13,
+      artistId: "artist_10",
       name: "Sorry",
       artist: "Justin Bieber",
       duration: "3:20",
@@ -157,6 +181,7 @@ const MainScreen = () => {
     },
     {
       id: 14,
+      artistId: "artist_10",
       name: "Stay",
       artist: "The Kid LAROI & Justin Bieber",
       duration: "2:21",
@@ -164,6 +189,7 @@ const MainScreen = () => {
     },
     {
       id: 15,
+      artistId: "artist_11",
       name: "Old Town Road",
       artist: "Lil Nas X ft. Billy Ray Cyrus",
       duration: "2:38",
@@ -171,6 +197,7 @@ const MainScreen = () => {
     },
     {
       id: 16,
+      artistId: "artist_12",
       name: "Dance Monkey",
       artist: "Tones and I",
       duration: "3:29",
@@ -178,6 +205,7 @@ const MainScreen = () => {
     },
     {
       id: 17,
+      artistId: "artist_2",
       name: "Perfect",
       artist: "Ed Sheeran",
       duration: "4:23",
@@ -185,6 +213,7 @@ const MainScreen = () => {
     },
     {
       id: 18,
+      artistId: "artist_4",
       name: "Hello",
       artist: "Adele",
       duration: "4:55",
@@ -192,6 +221,7 @@ const MainScreen = () => {
     },
     {
       id: 19,
+      artistId: "artist_13",
       name: "Rockstar",
       artist: "Post Malone ft. 21 Savage",
       duration: "3:38",
@@ -199,6 +229,7 @@ const MainScreen = () => {
     },
     {
       id: 20,
+      artistId: "artist_14",
       name: "Closer",
       artist: "The Chainsmokers ft. Halsey",
       duration: "4:04",
@@ -206,15 +237,8 @@ const MainScreen = () => {
     },
   ];
 
-  const [playlist, setPlaylist] = useState(initialPlaylist);
-
-  const handlePlay = () => {};
-  const handleToggleFavorite = (id) => {
-    const newPlaylist = playlist.map((item) =>
-      item.id === id ? { ...item, isFavorite: !item.isFavorite } : item
-    );
-    setPlaylist(newPlaylist);
-  };
+  const { playlist, handlePlay, handleToggleFavorite } =
+    usePlaylist(initialPlaylist);
 
   return (
     <View className="bg-background flex-1 flex-col px-5 pt-8">
@@ -249,6 +273,7 @@ const MainScreen = () => {
               <MusicCard
                 imgURL={music.image}
                 songName={music.name}
+                artistId={music.artistId}
                 artistName={music.artist}
               />
             </View>
@@ -271,6 +296,7 @@ const MainScreen = () => {
               <PlaylistItem
                 id={item.id}
                 songName={item.name}
+                artistId={item.artistId}
                 artistName={item.artist}
                 duration={item.duration}
                 isFavorite={item.isFavorite}

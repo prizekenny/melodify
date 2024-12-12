@@ -1,15 +1,8 @@
-import { View, Text, Image } from "react-native";
+import { View, Text, Image, TouchableOpacity } from "react-native";
 import React from "react";
 import { Ionicons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
 
-const MusicCard = ({ imgURL, songName, artistName, artistId }) => {
-  const navigation = useNavigation();
-
-  const handleArtistPress = () => {
-    navigation.navigate("artist", { artistId });
-  };
-
+const AlbumCard = ({ imgURL, albumName, artistName, onPlay }) => {
   return (
     <View className="flex-1 w-36 flex-column rounded-lg">
       {/* Image and play button */}
@@ -29,23 +22,18 @@ const MusicCard = ({ imgURL, songName, artistName, artistId }) => {
         )}
       </View>
 
-      {/* Song information */}
+      {/* Album information */}
       <View className="mt-1">
         <Text
           className="text-base font-bold text-gray-900"
-          numberOfLines={1} // Limit to single line
-          ellipsizeMode="tail" // Display as ... when exceeding
+          numberOfLines={1}
+          ellipsizeMode="tail"
         >
-          {songName}
+          {albumName}
         </Text>
-        <TouchableOpacity onPress={handleArtistPress}>
-          <Text className="text-sm text-gray-600" numberOfLines={1}>
-            {artistName}
-          </Text>
-        </TouchableOpacity>
       </View>
     </View>
   );
 };
 
-export default MusicCard;
+export default AlbumCard;

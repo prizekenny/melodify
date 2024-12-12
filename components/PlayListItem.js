@@ -1,16 +1,24 @@
 import React from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 
 const PlaylistItem = ({
   id,
   songName,
   artistName,
+  artistId,
   duration,
   isFavorite,
   onPlay,
   onToggleFavorite,
 }) => {
+  const navigation = useNavigation();
+
+  const handleArtistPress = () => {
+    navigation.navigate("artist", { artistId });
+  };
+
   return (
     <View className="flex-row items-center justify-between bg-background mr-2 rounded-lg p-1 shadow-md">
       {/* Play button */}
@@ -23,9 +31,11 @@ const PlaylistItem = ({
         <Text className="text-base font-bold text-gray-900" numberOfLines={1}>
           {songName}
         </Text>
-        <Text className="text-sm text-gray-600" numberOfLines={1}>
-          {artistName}
-        </Text>
+        <TouchableOpacity onPress={handleArtistPress}>
+          <Text className="text-sm text-gray-600" numberOfLines={1}>
+            {artistName}
+          </Text>
+        </TouchableOpacity>
       </View>
 
       {/* Song time and fav button */}
