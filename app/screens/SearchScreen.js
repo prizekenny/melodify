@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -7,12 +7,15 @@ import {
   StyleSheet,
   Image,
   TextInput,
+  Alert
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons"; // Import Ionicons for the search icon
+import { Ionicons } from "@expo/vector-icons";
+import { getTracks } from '../api/music';  // Ensure this path is correct based on your project structure
 
 const SearchScreen = () => {
   const [searchQuery, setSearchQuery] = useState("");
-
+  const [songs, setSongs] = useState([]);
+  const [displaySongs, setDisplaySongs] = useState([]);
   const categories = [
     { id: "1", name: "The Best of 2024", image: "https://picsum.photos/200" },
     { id: "2", name: "Holiday", image: "https://picsum.photos/id/15/200" },
@@ -22,16 +25,47 @@ const SearchScreen = () => {
     { id: "6", name: "Top Hits", image: "https://picsum.photos/id/57/200" },
   ];
 
-  const filteredCategories = categories.filter((category) =>
-    category.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  useEffect(() => {
+    const fetchSongs = async () => {
+      const data = await getTracks();
+      setSongs(data);
+    };
+    fetchSongs();
+  }, []);
 
-  const handleCancel = () => {
-    setSearchQuery(""); // Clear the search input
+  const handleSearch = (text) => {
+    setSearchQuery(text);
+    if (text === "") {
+      setDisplaySongs([]);
+      return;
+    }
+    const filtered = songs.filter(song =>
+      song.name.toLowerCase().includes(text.toLowerCase()) ||
+      song.artist.toLowerCase().includes(text.toLowerCase())
+    );
+    setDisplaySongs(filtered.length > 0 ? filtered : "noresults");
   };
 
+  const handleCategoryPress = () => {
+    const randomSongs = songs.sort(() => 0.5 - Math.random()).slice(0, 5);
+    setDisplaySongs(randomSongs);
+  };
+
+  const handleCancel = () => {
+    setSearchQuery(""); 
+    setDisplaySongs([]);
+  };
+
+  const renderSongItem = ({ item }) => (
+    <TouchableOpacity style={styles.songItem}>
+      <Image source={{ uri: item.cover }} style={styles.songImage} />
+      <Text style={styles.songName}>{item.name}</Text>
+      <Text style={styles.songArtist}>{item.artist}</Text>
+    </TouchableOpacity>
+  );
+
   const renderCategoryItem = ({ item }) => (
-    <TouchableOpacity style={styles.categoryItem}>
+    <TouchableOpacity style={styles.categoryItem} onPress={handleCategoryPress}>
       <Image source={{ uri: item.image }} style={styles.categoryImage} />
       <Text style={styles.categoryName}>{item.name}</Text>
     </TouchableOpacity>
@@ -50,38 +84,36 @@ const SearchScreen = () => {
           />
           <TextInput
             style={styles.searchBarInput}
-            placeholder="What Do You Want To Play?"
+            placeholder="Search songs or artists..."
             placeholderTextColor="#aaa"
             value={searchQuery}
-            onChangeText={setSearchQuery}
-            selectionColor="#f05a28" // Set the cursor color to orange
+            onChangeText={handleSearch}
+            selectionColor="#f05a28" // Cursor color
           />
           <TouchableOpacity onPress={handleCancel} style={styles.cancelButton}>
             <Text style={styles.cancelButtonText}>Cancel</Text>
           </TouchableOpacity>
         </View>
-        <Text style={styles.title}>Browser Categories</Text>
       </View>
 
-      {/* Categories Section */}
-      <View style={styles.categorySection}>
-        {filteredCategories.length > 0 ? (
-          <FlatList
-            data={filteredCategories}
-            keyExtractor={(item) => item.id}
-            renderItem={renderCategoryItem}
-            numColumns={2}
-            contentContainerStyle={styles.categoriesContainer}
-            columnWrapperStyle={styles.row}
-          />
-        ) : (
-          <View style={styles.noResultsContainer}>
-            <Text style={styles.noResultsText}>
-              Sorry, there is no relevant result...
-            </Text>
-          </View>
-        )}
-      </View>
+      {/* Display Area */}
+      <FlatList
+        key={displaySongs.length > 0 && displaySongs !== "noresults" ? 'one-column' : 'two-column'}
+        data={displaySongs.length > 0 && displaySongs !== "noresults" ? displaySongs : categories}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={displaySongs.length > 0 && displaySongs !== "noresults" ? renderSongItem : renderCategoryItem}
+        numColumns={displaySongs.length > 0 && displaySongs !== "noresults" ? 1 : 2}
+        contentContainerStyle={styles.displayContainer}
+        ListEmptyComponent={
+          displaySongs === "noresults" && (
+            <View style={styles.noResultsContainer}>
+              <Text style={styles.noResultsText}>
+                Sorry, there are no relevant results...
+              </Text>
+            </View>
+          )
+        }
+      />
     </View>
   );
 };
@@ -94,17 +126,17 @@ const styles = StyleSheet.create({
   },
   searchBarSection: {
     marginTop: 30,
-    marginBottom: 20, // Add spacing between sections
+    marginBottom: 20,
   },
   searchBarContainer: {
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "#f9f9f9",
     borderWidth: 2,
-    borderColor: "#f05a28", // Orange outline
+    borderColor: "#f05a28",
     borderRadius: 25,
     paddingHorizontal: 15,
-    height: 50, // Ensure consistent height
+    height: 50,
     marginBottom: 10,
   },
   searchIcon: {
@@ -115,7 +147,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#333",
     backgroundColor: "transparent",
-    outlineColor: "transparent", 
   },
   cancelButton: {
     marginLeft: 10,
@@ -126,27 +157,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
   },
-  title: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#333",
-  },
-  categorySection: {
-    flex: 1,
-  },
-  categoriesContainer: {
-    paddingBottom: 20,
-  },
-  row: {
-    justifyContent: "space-between",
-  },
   categoryItem: {
     flex: 1,
     margin: 10,
     borderRadius: 15,
     overflow: "hidden",
     backgroundColor: "#f5f5f5",
-    elevation: 3, // Shadow for Android
+    elevation: 3,
   },
   categoryImage: {
     width: "100%",
@@ -159,6 +176,32 @@ const styles = StyleSheet.create({
     color: "#333",
     textAlign: "center",
     padding: 10,
+  },
+  songItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+    paddingVertical: 10,
+  },
+  songImage: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    marginRight: 10,
+  },
+  songName: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#333',
+    flex: 1,
+  },
+  songArtist: {
+    fontSize: 14,
+    color: '#666',
+  },
+  displayContainer: {
+    paddingBottom: 20,
   },
   noResultsContainer: {
     flex: 1,
