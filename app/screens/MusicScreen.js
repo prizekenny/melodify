@@ -18,6 +18,7 @@ const MusicScreen = () => {
     togglePlayMode,
     playMode,
     updateTrack,
+    addTrack,
   } = useTracks();
 
   const router = useRouter();
@@ -28,6 +29,20 @@ const MusicScreen = () => {
     const minutes = Math.floor(totalSeconds / 60);
     const seconds = totalSeconds % 60;
     return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+  };
+
+  const handleToggleFavorite = async (id) => {
+    if (playingTrack) {
+      const newTrack = { ...playingTrack, favorite: !playingTrack.favorite };
+      updateTrack(id, newTrack);
+      setPlayingTrack(newTrack);
+    }
+  };
+
+  const handleAddTrack = async () => {
+    if (playingTrack) {
+      await addTrack(playingTrack);
+    }
   };
 
   return (
@@ -67,17 +82,23 @@ const MusicScreen = () => {
           </Text>
           <Text className="text-textSecondary">{playingTrack.artist}</Text>
         </View>
-        <TouchableOpacity
-          onPress={() =>
-            updateTrack(playingTrack.id, { favorite: !playingTrack.favorite })
-          }
-        >
-          <Ionicons
-            name={playingTrack.favorite ? "heart" : "heart-outline"}
-            size={28}
-            color={playingTrack.favorite ? "#E53935" : "gray"}
-          />
-        </TouchableOpacity>
+        {/* Icons Container */}
+        <View className="flex-row items-center space-x-3 gap-5">
+          <TouchableOpacity
+            onPress={() => {
+              handleToggleFavorite(playingTrack.id);
+            }}
+          >
+            <Ionicons
+              name={playingTrack.favorite ? "heart" : "heart-outline"}
+              size={28}
+              color={playingTrack.favorite ? "#E53935" : "gray"}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleAddTrack}>
+            <Ionicons name="star-outline" size={28} color="#FFD700" />
+          </TouchableOpacity>
+        </View>
       </View>
 
       {/* Progress Bar */}
