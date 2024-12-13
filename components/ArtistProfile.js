@@ -26,7 +26,8 @@ const ArtistProfile = ({
           {artist}
         </Text>
         <Text className="text-gray-600 mt-1 text-center">
-          {`${albumCount} Album${albumCount !== 1 ? 's' : ''} · ${songCount} Song${songCount !== 1 ? 's' : ''}`}
+          {albumCount} Album{albumCount !== 1 ? "s" : ""} · {songCount} Song
+          {songCount !== 1 ? "s" : ""}
         </Text>
         <Text 
           className="text-gray-500 text-center mt-3 px-4"

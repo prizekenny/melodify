@@ -91,7 +91,9 @@ const ArtistScreen = ({ artist }) => {
           <Ionicons name="arrow-back" size={24} color="black" />
         </TouchableOpacity>
         <Text className="text-xl font-bold">{artist}</Text>
-        <View style={{ width: 24 }} /> {/* Spacer for alignment */}
+        <View style={{ width: 24 }}>
+          <Text></Text>
+        </View>
       </View>
 
       <ScrollView className="flex-1 px-5 mb-24">
@@ -109,7 +111,9 @@ const ArtistScreen = ({ artist }) => {
             className="gap-4"
           >
             {albums.length === 0 ? (
-              <Text className="text-gray-500">Loading...</Text>
+              <View>
+                <Text className="text-gray-500">Loading...</Text>
+              </View>
             ) : (
               albums.map((album) => (
                 <AlbumCard
@@ -128,7 +132,9 @@ const ArtistScreen = ({ artist }) => {
         <View className="mt-6">
           <Text className="text-textPrimary text-xl mb-4">Popular Songs</Text>
           {artistTracks.length === 0 ? (
-            <Text className="text-gray-500">Loading...</Text>
+            <View>
+              <Text className="text-gray-500">Loading...</Text>
+            </View>
           ) : (
             artistTracks.map((track) => (
               <View key={track.id} className="mb-2">

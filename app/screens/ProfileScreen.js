@@ -13,6 +13,13 @@ const ProfileScreen = () => {
     router.push("/music");
   };
 
+  const handleArtistPress = (artistName) => {
+    router.push({
+      pathname: "/artist/[name]",
+      params: { name: artistName }
+    });
+  };
+
   return (
     <ScrollView className="flex-1 bg-background">
       {/* Top Section */}
@@ -63,6 +70,7 @@ const ProfileScreen = () => {
                     duration={track.duration}
                     favorite={track.favorite}
                     onPlay={() => handlePlay(track)}
+                    onArtistPress={() => handleArtistPress(track.artist)}
                   />
                 </View>
               ))}
