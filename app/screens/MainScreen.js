@@ -1,4 +1,4 @@
-import { View, Text, ScrollView } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity } from "react-native";
 import React, { useEffect, useState } from "react";
 import NewAlbum from "../../components/NewAlbum";
 import MusicCard from "../../components/MusicCard";
@@ -47,6 +47,12 @@ const MainScreen = () => {
       updateTrack(id, { favorite: !updatedTrack.favorite });
     }
   };
+  const handleArtistPress = (artistName) => {
+    router.push({
+      pathname: "/artist/[name]",
+      params: { name: artistName }
+    });
+  };
 
   return (
     <View className="bg-background flex-1 flex-col px-5 mt-12">
@@ -71,21 +77,15 @@ const MainScreen = () => {
       {/* News */}
       <View className="flex-col mb-5 h-60">
         <Text className="text-textPrimary mb-2 text-2xl">News</Text>
-        <ScrollView
-          horizontal={true}
-          showsHorizontalScrollIndicator={true}
-          keyboardShouldPersistTaps="handled"
-          nestedScrollEnabled={true}
-          className="gap-2"
-        >
-          {tracks.length == 0 && <Text>Loading...</Text>}
+        <ScrollView horizontal={true} showsHorizontalScrollIndicator={true} className="gap-2">
           {tracks.map((track, index) => (
-            /* must use View to wrap PlaylistItem, otherwise the parent gap does not work */
             <View key={index}>
               <MusicCard
                 cover={track.cover}
                 name={track.name}
                 artist={track.artist}
+                onPlay={() => handlePlay(track)}
+                onArtistPress={() => handleArtistPress(track.artist)}
               />
             </View>
           ))}
@@ -103,7 +103,6 @@ const MainScreen = () => {
         >
           {tracks.length == 0 && <Text>Loading...</Text>}
           {tracks.map((track, index) => (
-            /* must use View to wrap PlaylistItem, otherwise the parent gap does not work */
             <View key={index}>
               <PlaylistItem
                 id={track.id}
@@ -113,6 +112,7 @@ const MainScreen = () => {
                 favorite={track.favorite}
                 onPlay={() => handlePlay(track)}
                 onToggleFavorite={() => handleToggleFavorite(track.id)}
+                onArtistPress={() => handleArtistPress(track.artist)}
               />
             </View>
           ))}

@@ -10,6 +10,7 @@ const PlaylistItem = ({
   favorite,
   onPlay,
   onToggleFavorite,
+  onArtistPress,
 }) => {
   return (
     <View className="flex-row items-center justify-between bg-background mr-2 rounded-lg p-1 shadow-md">
@@ -23,9 +24,11 @@ const PlaylistItem = ({
         <Text className="text-base font-bold text-gray-900" numberOfLines={1}>
           {name}
         </Text>
-        <Text className="text-sm text-gray-600" numberOfLines={1}>
-          {artist}
-        </Text>
+        <TouchableOpacity onPress={onArtistPress}>
+          <Text className="text-sm text-gray-600" numberOfLines={1}>
+            {artist}
+          </Text>
+        </TouchableOpacity>
       </View>
 
       {/* Song time and fav button */}

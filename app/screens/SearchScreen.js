@@ -65,10 +65,17 @@ const SearchScreen = () => {
     setDisplaySongs([]);
   };
 
+  const handleArtistPress = (artistName) => {
+    router.push({
+      pathname: "/artist/[name]",
+      params: { name: artistName }
+    });
+  };
+
   const renderSongItem = ({ item }) => (
     <TouchableOpacity
       className="flex-row items-center border-b border-gray-300 py-2"
-      onPress={() => handleSongPress(item)} // Navigate to MusicScreen
+      onPress={() => handleSongPress(item)}
     >
       <Image
         source={{ uri: item.cover }}
@@ -76,7 +83,9 @@ const SearchScreen = () => {
       />
       <View className="flex-1">
         <Text className="text-base font-bold text-gray-800">{item.name}</Text>
-        <Text className="text-sm text-gray-500">{item.artist}</Text>
+        <TouchableOpacity onPress={() => handleArtistPress(item.artist)}>
+          <Text className="text-sm text-gray-500">{item.artist}</Text>
+        </TouchableOpacity>
       </View>
     </TouchableOpacity>
   );

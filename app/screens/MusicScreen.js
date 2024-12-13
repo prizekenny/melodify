@@ -43,6 +43,13 @@ const MusicScreen = () => {
     }
   };
 
+  const handleArtistPress = (artistName) => {
+    router.push({
+      pathname: "/artist/[name]",
+      params: { name: artistName }
+    });
+  };
+
   if (playingTrack === null) return null;
 
   return (
@@ -80,7 +87,9 @@ const MusicScreen = () => {
           <Text className="text-textPrimary text-xl font-bold">
             {playingTrack.name}
           </Text>
-          <Text className="text-textSecondary">{playingTrack.artist}</Text>
+          <TouchableOpacity onPress={() => handleArtistPress(playingTrack.artist)}>
+            <Text className="text-textSecondary">{playingTrack.artist}</Text>
+          </TouchableOpacity>
         </View>
         {/* Icons Container */}
         <View className="flex-row items-center space-x-3 gap-5">

@@ -2,7 +2,7 @@ import { View, Text, Image, TouchableOpacity } from "react-native";
 import React from "react";
 import { Ionicons } from "@expo/vector-icons";
 
-const MusicCard = ({ cover, name, artist, onPlay, onArtistPress }) => {
+const AlbumCard = ({ cover, name, artist, onPlay }) => {
   return (
     <View className="flex-1 w-36 flex-column rounded-lg">
       {/* Image and play button */}
@@ -11,7 +11,6 @@ const MusicCard = ({ cover, name, artist, onPlay, onArtistPress }) => {
           source={{ uri: cover || "https://via.placeholder.com/150" }}
           className="w-full h-full rounded-3xl"
         />
-        {/* Play button，only display when handlePlay function is not null */}
         {onPlay && (
           <TouchableOpacity
             className="absolute bottom-1 right-1 bg-black w-6 h-6 rounded-full flex items-center justify-center"
@@ -22,27 +21,25 @@ const MusicCard = ({ cover, name, artist, onPlay, onArtistPress }) => {
         )}
       </View>
 
-      {/* Song information */}
+      {/* Album information */}
       <View className="mt-1">
         <Text
           className="text-base font-bold text-gray-900"
-          numberOfLines={1} // Limit to single line
-          ellipsizeMode="tail" // Display as ... when exceeding
+          numberOfLines={1}
+          ellipsizeMode="tail"
         >
           {name}
         </Text>
-        <TouchableOpacity onPress={onArtistPress}>
-          <Text
-            className="text-sm text-gray-600"
-            numberOfLines={1} // Limit to single line
-            ellipsizeMode="tail" // Display as ... when exceeding
-          >
-            {artist}
-          </Text>
-        </TouchableOpacity>
+        <Text
+          className="text-sm text-gray-600"
+          numberOfLines={1}
+          ellipsizeMode="tail"
+        >
+          {artist}
+        </Text>
       </View>
     </View>
   );
 };
 
-export default MusicCard;
+export default AlbumCard;
