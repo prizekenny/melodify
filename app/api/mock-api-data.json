@@ -1,21 +1,252 @@
-
-
 // new albums
 [
   {
-    "name": "Happier Than Ever",
-    "artist": "Billie Eilish",
+    "name": "Different World",
+    "artist": "Alan Walker",
     "cover": "https://picsum.photos/200?random=1001",
     "id": "1"
   },
   {
-    "name": "Happier Than Ever",
-    "artist": "Billie Eilish",
+    "name": "After Hours",
+    "artist": "The Weeknd",
     "cover": "https://picsum.photos/200?random=1002",
     "id": "2"
+  },
+  {
+    "name": "Divide",
+    "artist": "Ed Sheeran",
+    "cover": "https://picsum.photos/200?random=1003",
+    "id": "3"
+  },
+  {
+    "name": "Future Nostalgia",
+    "artist": "Dua Lipa",
+    "cover": "https://picsum.photos/200?random=1004",
+    "id": "4"
+  },
+  {
+    "name": "When We All Fall Asleep, Where Do We Go?",
+    "artist": "Billie Eilish",
+    "cover": "https://picsum.photos/200?random=1005",
+    "id": "5"
+  },
+  {
+    "name": "21",
+    "artist": "Adele",
+    "cover": "https://picsum.photos/200?random=1006",
+    "id": "6"
+  },
+  {
+    "name": "The Kids Are Coming",
+    "artist": "Tones and I",
+    "cover": "https://picsum.photos/200?random=1007",
+    "id": "7"
+  },
+  {
+    "name": "Stay",
+    "artist": "The Kid LAROI & Justin Bieber",
+    "cover": "https://picsum.photos/200?random=1008",
+    "id": "8"
+  },
+  {
+    "name": "Beerbongs & Bentleys",
+    "artist": "Post Malone ft. 21 Savage",
+    "cover": "https://picsum.photos/200?random=1009",
+    "id": "9"
+  },
+  {
+    "name": "Uptown Special",
+    "artist": "Mark Ronson ft. Bruno Mars",
+    "cover": "https://picsum.photos/200?random=1010",
+    "id": "10"
+  },
+  {
+    "name": "Camila",
+    "artist": "Camila Cabello",
+    "cover": "https://picsum.photos/200?random=1011",
+    "id": "11"
+  },
+  {
+    "name": "A Star Is Born Soundtrack",
+    "artist": "Lady Gaga & Bradley Cooper",
+    "cover": "https://picsum.photos/200?random=1012",
+    "id": "12"
+  },
+  {
+    "name": "25",
+    "artist": "Adele",
+    "cover": "https://picsum.photos/200?random=1013",
+    "id": "13"
+  },
+  {
+    "name": "Vida",
+    "artist": "Luis Fonsi ft. Daddy Yankee",
+    "cover": "https://picsum.photos/200?random=1014",
+    "id": "14"
+  },
+  {
+    "name": "A Night at the Opera",
+    "artist": "Queen",
+    "cover": "https://picsum.photos/200?random=1015",
+    "id": "15"
+  },
+  {
+    "name": "Evolve",
+    "artist": "Imagine Dragons",
+    "cover": "https://picsum.photos/200?random=1016",
+    "id": "16"
+  },
+  {
+    "name": "Senorita",
+    "artist": "Shawn Mendes & Camila Cabello",
+    "cover": "https://picsum.photos/200?random=1017",
+    "id": "17"
+  },
+  {
+    "name": "Equals",
+    "artist": "Ed Sheeran",
+    "cover": "https://picsum.photos/200?random=1018",
+    "id": "18"
+  },
+  {
+    "name": "X",
+    "artist": "Ed Sheeran",
+    "cover": "https://picsum.photos/200?random=1019",
+    "id": "19"
+  },
+  {
+    "name": "This Is Acting",
+    "artist": "Sia",
+    "cover": "https://picsum.photos/200?random=1020",
+    "id": "20"
+  },
+  {
+    "name": "Memories",
+    "artist": "Maroon 5",
+    "cover": "https://picsum.photos/200?random=1021",
+    "id": "21"
+  },
+  {
+    "name": "Love in the Future",
+    "artist": "John Legend",
+    "cover": "https://picsum.photos/200?random=1022",
+    "id": "22"
+  },
+  {
+    "name": "Purpose",
+    "artist": "Justin Bieber",
+    "cover": "https://picsum.photos/200?random=1023",
+    "id": "23"
+  },
+  {
+    "name": "Views",
+    "artist": "Drake",
+    "cover": "https://picsum.photos/200?random=1024",
+    "id": "24"
+  },
+  {
+    "name": "True",
+    "artist": "Avicii",
+    "cover": "https://picsum.photos/200?random=1025",
+    "id": "25"
+  },
+  {
+    "name": "All the Little Lights",
+    "artist": "Passenger",
+    "cover": "https://picsum.photos/200?random=1026",
+    "id": "26"
+  },
+  {
+    "name": "Collage",
+    "artist": "The Chainsmokers ft. Halsey",
+    "cover": "https://picsum.photos/200?random=1027",
+    "id": "27"
+  },
+  {
+    "name": "V",
+    "artist": "Maroon 5",
+    "cover": "https://picsum.photos/200?random=1028",
+    "id": "28"
+  },
+  {
+    "name": "G I R L",
+    "artist": "Pharrell Williams",
+    "cover": "https://picsum.photos/200?random=1029",
+    "id": "29"
+  },
+  {
+    "name": "Hozier",
+    "artist": "Hozier",
+    "cover": "https://picsum.photos/200?random=1030",
+    "id": "30"
+  },
+  {
+    "name": "Blurryface",
+    "artist": "Twenty One Pilots",
+    "cover": "https://picsum.photos/200?random=1031",
+    "id": "31"
+  },
+  {
+    "name": "Happier",
+    "artist": "Marshmello & Bastille",
+    "cover": "https://picsum.photos/200?random=1032",
+    "id": "32"
+  },
+  {
+    "name": "13 Reasons Why",
+    "artist": "Billie Eilish ft. Khalid",
+    "cover": "https://picsum.photos/200?random=1033",
+    "id": "33"
+  },
+  {
+    "name": "Native",
+    "artist": "OneRepublic",
+    "cover": "https://picsum.photos/200?random=1034",
+    "id": "34"
+  },
+  {
+    "name": "Thank U, Next",
+    "artist": "Ariana Grande",
+    "cover": "https://picsum.photos/200?random=1035",
+    "id": "35"
+  },
+  {
+    "name": "Beauty Behind the Madness",
+    "artist": "The Weeknd",
+    "cover": "https://picsum.photos/200?random=1036",
+    "id": "36"
+  },
+  {
+    "name": "7 EP",
+    "artist": "Lil Nas X ft. Billy Ray Cyrus",
+    "cover": "https://picsum.photos/200?random=1037",
+    "id": "37"
+  },
+  {
+    "name": "Delirium",
+    "artist": "Ellie Goulding",
+    "cover": "https://picsum.photos/200?random=1038",
+    "id": "38"
+  },
+  {
+    "name": "Without Me",
+    "artist": "Halsey",
+    "cover": "https://picsum.photos/200?random=1039",
+    "id": "39"
+  },
+  {
+    "name": "Prism",
+    "artist": "Katy Perry",
+    "cover": "https://picsum.photos/200?random=1040",
+    "id": "40"
+  },
+  {
+    "name": "In a Perfect World",
+    "artist": "Kodaline",
+    "cover": "https://picsum.photos/200?random=1041",
+    "id": "41"
   }
 ]
-
 
 // tracks
 [
