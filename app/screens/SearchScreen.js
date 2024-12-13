@@ -133,7 +133,7 @@ const SearchScreen = () => {
         numColumns={
           displaySongs.length > 0 && displaySongs !== "noresults" ? 1 : 2
         }
-        contentContainerStyle="pb-20"
+        contentContainerStyle={{ paddingBottom: 20 }}
         ListEmptyComponent={
           displaySongs === "noresults" && (
             <View className="flex-1 justify-center items-center mt-5">
