@@ -1,7 +1,6 @@
 # A music player UI using ReactNative
 
-
-
+![image](https://github.com/user-attachments/assets/bee925ff-f8b7-4290-ab5e-3a7f136f720e)
 
 # How to set api data
 - 1. create a [mock-api](www.mockapi.io) account.
